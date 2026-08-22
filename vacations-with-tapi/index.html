@@ -992,7 +992,7 @@
           <span class="box"></span>
           <span class="check-title">Flights booked</span>
         </label>
-        <p class="check-note">Kiwi booking <b>8332959</b>. Israir, both nonstop, 1 free carry-on. Outbound <b>6H567</b> Fri 11 Sep TLV → ATH 11:10–13:25. Return <b>6H570</b> Sun 20 Sep ATH → TLV 00:30–02:30. Be at ATH by <b>21:30</b> (3 hours before). Screenshot the confirmation and check in with Israir.</p>
+        <p class="check-note">Kiwi - Israir, both nonstop, 1 free carry-on. Outbound <b>6H567</b> Fri 11 Sep TLV → ATH 11:10–13:25. Return <b>6H570</b> Sun 20 Sep ATH → TLV 00:30–02:30. Be at ATH by <b>21:30</b> (3 hours before). Screenshot the confirmation and check in with Israir.</p>
       </div>
 
       <div class="task" data-task="ferries">
@@ -1499,11 +1499,13 @@
     localStorage.setItem(KEY, JSON.stringify(state));
   }
 
+  var DEFAULTS = { flights: true };
   var state = load();
   var boxes = [].slice.call(root.querySelectorAll("input[type=checkbox][data-id]"));
 
   boxes.forEach(function(box){
-    box.checked = !!state[box.getAttribute("data-id")];
+    var id = box.getAttribute("data-id");
+    box.checked = id in state ? !!state[id] : !!DEFAULTS[id];
   });
 
   function kidsOf(el){
