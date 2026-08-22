@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greece, September 2026</title>
+<style>
+  :root{
+    --ink:#1f1e1c;
+    --ink-2:#5c5a54;
+    --ink-3:#8f8d85;
+    --line:#e6e4dd;
+    --line-2:#d4d1c8;
+    --paper:#ffffff;
+    --shell:#faf9f6;
+    --sea:#e8f1f7;
+    --sea-ink:#1b5273;
+    --sea-line:#bcd7e6;
+    --isle:#eef2e9;
+    --isle-ink:#4a5f36;
+    --isle-line:#d3dec6;
+    --sand:#f8eddb;
+    --sand-ink:#7a5320;
+    --sand-line:#ecd8b6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--shell);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    font-size:15px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:1080px;
+    margin:32px auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:40px 40px 44px;
+  }
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:26px;
+  }
+  h1{
+    margin:0;
+    font-size:30px;
+    font-weight:600;
+    letter-spacing:-0.02em;
+  }
+  .sub{margin:4px 0 0;color:var(--ink-2);font-size:14px}
+  .route{
+    text-align:right;
+    font-size:13px;
+    color:var(--ink-2);
+    line-height:1.7;
+    white-space:nowrap;
+  }
+  .route b{color:var(--ink);font-weight:600}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+  }
+  .dow{
+    font-size:11px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding:0 0 6px 4px;
+  }
+  .cell{
+    min-height:132px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 8px 10px;
+    background:var(--paper);
+  }
+  .cell.empty{border:none;background:none;min-height:0}
+  .cell.off{background:#fbfaf7}
+  .num{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-2);
+    margin-bottom:6px;
+  }
+  .cell.off .num{color:var(--ink-3);font-weight:500}
+  .chip{
+    border-radius:7px;
+    padding:5px 7px;
+    font-size:11.5px;
+    line-height:1.4;
+    margin-bottom:5px;
+  }
+  .chip b{display:block;font-weight:600}
+  .chip:last-child{margin-bottom:0}
+  .c-sea{background:var(--sea);color:var(--sea-ink);border:1px solid var(--sea-line)}
+  .c-isle{background:var(--isle);color:var(--isle-ink);border:1px solid var(--isle-line)}
+  .c-sand{background:var(--sand);color:var(--sand-ink);border:1px solid var(--sand-line)}
+  .plain{font-size:11.5px;line-height:1.45;color:var(--ink-2);padding:1px 2px}
+
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    align-items:center;
+    margin-top:24px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--ink-2);
+  }
+  .swatch{
+    display:inline-block;
+    width:11px;height:11px;
+    border-radius:3px;
+    margin-right:7px;
+    vertical-align:-1px;
+  }
+  .legend .spacer{margin-left:auto}
+
+  .notes{
+    margin-top:34px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+  }
+  h2{
+    margin:0 0 16px;
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    font-weight:600;
+  }
+  .rows{display:grid;gap:0}
+  .row{
+    display:grid;
+    grid-template-columns:132px 1fr;
+    gap:20px;
+    padding:11px 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  .row:last-child{border-bottom:none}
+  .when{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .when span{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+  .what{font-size:13.5px;color:var(--ink-2)}
+  .what b{color:var(--ink);font-weight:600}
+
+  .tips{
+    margin-top:30px;
+    padding:18px 20px;
+    background:var(--shell);
+    border:1px solid var(--line);
+    border-radius:10px;
+    font-size:13px;
+    color:var(--ink-2);
+  }
+  .tips b{color:var(--ink);font-weight:600}
+  .tips ul{margin:8px 0 0;padding-left:18px}
+  .tips li{margin-bottom:5px}
+  .tips li:last-child{margin-bottom:0}
+
+  @media (max-width:820px){
+    .sheet{margin:0;border:none;border-radius:0;padding:24px 18px 32px}
+    header{flex-direction:column;align-items:flex-start;gap:10px}
+    .route{text-align:left;white-space:normal}
+    .grid{grid-template-columns:1fr;gap:6px}
+    .dow{display:none}
+    .cell{min-height:0}
+    .cell.empty{display:none}
+    .row{grid-template-columns:1fr;gap:4px}
+  }
+  @media print{
+    body{background:#fff}
+    .sheet{margin:0;border:none;border-radius:0;padding:0;max-width:none}
+    .cell{min-height:120px}
+    @page{size:A4 landscape;margin:12mm}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div>
+      <h1>Greece, September 2026</h1>
+      <p class="sub">Athens, Sifnos, Milos</p>
+    </div>
+    <div class="route">
+      <b>Fri 11 Sep</b> · TLV → ATH · 11:10 to 13:25<br>
+      <b>Sun 20 Sep</b> · ATH → TLV · 00:30 to 02:30
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="dow">Sun</div>
+    <div class="dow">Mon</div>
+    <div class="dow">Tue</div>
+    <div class="dow">Wed</div>
+    <div class="dow">Thu</div>
+    <div class="dow">Fri</div>
+    <div class="dow">Sat</div>
+
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
+    <div class="cell off"><div class="num">1</div></div>
+    <div class="cell off"><div class="num">2</div></div>
+    <div class="cell off"><div class="num">3</div></div>
+    <div class="cell off"><div class="num">4</div></div>
+    <div class="cell off"><div class="num">5</div></div>
+
+    <div class="cell off"><div class="num">6</div></div>
+    <div class="cell off"><div class="num">7</div></div>
+    <div class="cell off"><div class="num">8</div></div>
+    <div class="cell off"><div class="num">9</div></div>
+    <div class="cell off"><div class="num">10</div></div>
+
+    <div class="cell">
+      <div class="num">11</div>
+      <div class="chip c-sea"><b>TLV → ATH</b>11:10 to 13:25</div>
+      <div class="plain">Transfer to Plaka area. Plaka and Anafiotika, sunset, taverna dinner.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">12</div>
+      <div class="chip c-sand">Rosh Hashanah</div>
+      <div class="plain">Early Acropolis, Acropolis Museum. Ancient Agora or Thissio.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">13</div>
+      <div class="chip c-sand">Rosh Hashanah</div>
+      <div class="chip c-sea"><b>Ferry</b>Piraeus → Sifnos</div>
+      <div class="plain">Land at Kamares, settle in Apollonia.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">14</div>
+      <div class="chip c-isle"><b>Sifnos</b>Apollonia, Artemonas</div>
+      <div class="plain">Village walks, pottery workshops.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">15</div>
+      <div class="chip c-isle"><b>Sifnos</b>Kastro</div>
+      <div class="plain">Medieval lanes and sea views. Walk down to Chrysopigi.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">16</div>
+      <div class="chip c-isle"><b>Sifnos</b>Beach day</div>
+      <div class="plain">Platis Gialos, Vathi, or a quiet cove. Scooter or car helps.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">17</div>
+      <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos, 35 to 60 min</div>
+      <div class="plain">Arrive Adamas. Afternoon at Sarakiniko.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">18</div>
+      <div class="chip c-isle"><b>Milos</b>Boat tour</div>
+      <div class="plain">Full day to Kleftiko caves. Plaka village for sunset.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">19</div>
+      <div class="chip c-isle"><b>Milos</b>Firiplaka, Klima</div>
+      <div class="chip c-sea"><b>Ferry</b>Milos → Piraeus, late afternoon</div>
+      <div class="plain">Head toward the airport. Night flight.</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">20</div>
+      <div class="chip c-sea"><b>ATH → TLV</b>00:30 to 02:30</div>
+      <div class="chip c-sand">Yom Kippur starts 18:18</div>
+    </div>
+
+    <div class="cell">
+      <div class="num">21</div>
+      <div class="chip c-sand">Yom Kippur</div>
+    </div>
+
+    <div class="cell off"><div class="num">22</div></div>
+    <div class="cell off"><div class="num">23</div></div>
+    <div class="cell off"><div class="num">24</div></div>
+    <div class="cell off"><div class="num">25</div></div>
+    <div class="cell off"><div class="num">26</div></div>
+
+    <div class="cell off"><div class="num">27</div></div>
+    <div class="cell off"><div class="num">28</div></div>
+    <div class="cell off"><div class="num">29</div></div>
+    <div class="cell off"><div class="num">30</div></div>
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="swatch" style="background:#bcd7e6"></i>Flights and ferries</span>
+    <span><i class="swatch" style="background:#d3dec6"></i>Islands</span>
+    <span><i class="swatch" style="background:#ecd8b6"></i>Holidays</span>
+    <span class="spacer">2 nights Athens · 4 nights Sifnos · 2 nights Milos</span>
+  </div>
+
+  <div class="notes">
+    <h2>Day by day</h2>
+    <div class="rows">
+
+      <div class="row">
+        <div class="when">Fri 11 Sep<span>Athens</span></div>
+        <div class="what">Land at <b>13:25</b>. Metro to the centre takes 40 to 60 minutes, bus and taxi also work. Stay in Plaka, Koukaki, or near the Acropolis. Check in, then walk Plaka and Anafiotika, catch the sunset, and eat at a taverna.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sat 12 Sep<span>Athens</span></div>
+        <div class="what"><b>Acropolis and Parthenon early</b>, timed tickets are worth booking. Then the Acropolis Museum. Afternoon in the Ancient Agora or a walk through Psyrri and Thissio. Dinner nearby.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sun 13 Sep<span>Athens to Sifnos</span></div>
+        <div class="what">Morning ferry <b>Piraeus → Sifnos</b>. Arrive at Kamares port, transfer to Apollonia, Artemonas, Kastro, or a beach base. Settle in and explore close by.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Mon 14 to Wed 16<span>Sifnos</span></div>
+        <div class="what">Apollonia and Artemonas villages, <b>Kastro</b> for the medieval feel and the views, walking paths between villages or down to Chrysopigi Monastery, beaches at Platis Gialos and Vathi or quieter coves, pottery workshops, and very good local food such as chickpea dishes and seafood. A scooter or small car gives you freedom. Quiet and authentic.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Thu 17 Sep<span>Sifnos to Milos</span></div>
+        <div class="what">Short ferry <b>Sifnos → Milos</b>, 35 to 60 minutes, roughly 6 to 15 euro per person, several crossings a day. Arrive at Adamas. You can also move a day earlier on 16 Sep if you want more time on Milos.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Thu 17 to Sat 19<span>Milos</span></div>
+        <div class="what"><b>Full day boat tour</b> for the Kleftiko caves and the coastline, well worth it. Sarakiniko for the white volcanic rock, Firiplaka and other beaches, Pollonia fishing village, Plaka village at sunset, and Klima with the colourful boat houses. A scooter or car makes the beaches much easier.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sat 19 Sep<span>Milos to Athens</span></div>
+        <div class="what">Afternoon or evening ferry <b>Milos → Piraeus</b>. High speed is around 3 to 4 hours, conventional is longer, fares roughly 38 to 80 euro per person. From Piraeus head to the airport, or stay in the city if you want a break. Leave a buffer for delays.</div>
+      </div>
+
+      <div class="row">
+        <div class="when">Sun 20 Sep<span>Home</span></div>
+        <div class="what">Flight departs Athens <b>00:30</b> and lands in Tel Aviv <b>02:30</b>. Yom Kippur starts that evening around <b>18:18</b>, so you have about 16 hours at home first.</div>
+      </div>
+
+    </div>
+
+    <div class="tips">
+      <b>Worth planning ahead</b>
+      <ul>
+        <li>Book the Milos to Piraeus ferry on 19 Sep as early as possible. It is the one leg that has to work, since the flight is the same night.</li>
+        <li>Sifnos and Milos ferries can be cancelled in strong wind. Keep the last night flexible in case you need to return to Athens a day early.</li>
+        <li>Acropolis tickets are timed. Buy them before the trip and go for the first slot.</li>
+        <li>Book scooters or cars in advance for both islands.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
