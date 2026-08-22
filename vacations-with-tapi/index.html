@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#faf9f6">
 <meta name="format-detection" content="telephone=no">
 <title>Vacations with Tapi · Greece, September 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.css" crossorigin="">
 <style>
   :root{
     --ink:#1f1e1c;
@@ -276,6 +277,157 @@
   }
   .whisper b{color:var(--ink);font-weight:600}
 
+  .todo-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    margin:32px 0 10px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+  }
+  .todo-head h2{margin:0}
+  .todo-head p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-2);
+  }
+  .todo-head p b{color:var(--ink);font-weight:600}
+  .bar{
+    height:4px;
+    background:var(--line);
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:14px;
+  }
+  .bar > i{
+    display:block;
+    height:100%;
+    width:0%;
+    background:var(--isle-ink);
+    border-radius:99px;
+    transition:width .25s ease;
+  }
+  .tasks{display:grid;gap:10px}
+  .task{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:2px 2px 10px;
+    background:var(--paper);
+  }
+  .task.is-done{background:#fbfaf7}
+  .check,.todo-sub-head{
+    display:grid;
+    grid-template-columns:20px 1fr;
+    column-gap:12px;
+    align-items:flex-start;
+    cursor:pointer;
+    position:relative;
+  }
+  .check{padding:12px 12px 6px}
+  .check input,.todo-sub-head input{
+    position:absolute;
+    opacity:0;
+    width:1px;height:1px;
+    pointer-events:none;
+  }
+  .box{
+    width:20px;height:20px;
+    border:1.5px solid var(--line-2);
+    border-radius:6px;
+    background:#fff;
+    margin-top:1px;
+    position:relative;
+  }
+  .check input:checked + .box,
+  .todo-sub-head input:checked + .box{
+    background:var(--isle-ink);
+    border-color:var(--isle-ink);
+  }
+  .check input:checked + .box::after,
+  .todo-sub-head input:checked + .box::after{
+    content:"";
+    position:absolute;
+    left:6px;top:2px;
+    width:5px;height:10px;
+    border:solid #fff;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+  }
+  .check input:focus-visible + .box,
+  .todo-sub-head input:focus-visible + .box{
+    outline:2px solid var(--sea-ink);
+    outline-offset:2px;
+  }
+  .check-title{
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    padding-top:1px;
+  }
+  .check-note{
+    margin:0 14px 8px 44px;
+    font-size:12.5px;
+    color:var(--ink-2);
+    line-height:1.5;
+  }
+  .check-note b,.todo-sub-note b{color:var(--ink);font-weight:600}
+  .todo-subs{
+    margin:2px 10px 6px 44px;
+    display:grid;
+    gap:6px;
+  }
+  .todo-sub{
+    padding:10px 12px;
+    background:var(--shell);
+    border:1px solid var(--line);
+    border-radius:10px;
+  }
+  .todo-sub-head{grid-template-columns:16px 1fr;column-gap:10px}
+  .todo-sub-head .box{width:16px;height:16px;border-radius:5px;margin-top:3px}
+  .todo-sub-head input:checked + .box::after{left:4px;top:1px;width:4px;height:8px}
+  .todo-sub-title{font-size:13px;font-weight:600;color:var(--ink);padding-top:1px}
+  .todo-sub-note{
+    margin:6px 0 0 26px;
+    font-size:12px;
+    color:var(--ink-2);
+    line-height:1.45;
+  }
+  .pills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:8px 0 0 26px;
+  }
+  .pill{
+    font-size:11px;
+    font-weight:600;
+    padding:4px 8px;
+    border-radius:99px;
+    background:var(--paper);
+    border:1px solid var(--line-2);
+    color:var(--ink-2);
+  }
+  .pill.sea{background:var(--sea);border-color:var(--sea-line);color:var(--sea-ink)}
+  .pill.isle{background:var(--isle);border-color:var(--isle-line);color:var(--isle-ink)}
+  .pill.sand{background:var(--sand);border-color:var(--sand-line);color:var(--sand-ink)}
+  .pill.opt{border-style:dashed;font-weight:500}
+  .tag{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:2px 7px;
+    border-radius:99px;
+    margin-left:6px;
+    vertical-align:2px;
+  }
+  .tag-book{background:var(--sea);color:var(--sea-ink);border:1px solid var(--sea-line)}
+  .tag-walk{background:var(--sand);color:var(--sand-ink);border:1px solid var(--sand-line)}
+
+
   .pack{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -300,7 +452,9 @@
     }
     header{flex-direction:column;align-items:flex-start;gap:12px}
     h1{font-size:clamp(24px, 7vw, 30px);line-height:1.2}
-    .flights-head{flex-direction:column;align-items:flex-start;gap:6px}
+    .flights-head,.todo-head{flex-direction:column;align-items:flex-start;gap:6px}
+    .todo-subs{margin-left:12px;margin-right:8px}
+    .check-note{margin-left:12px;margin-right:10px}
     .overview{grid-template-columns:1fr 1fr;gap:8px}
     .flights .overview{grid-template-columns:1fr}
     .tile{padding:12px}
@@ -349,10 +503,195 @@
   @media (max-width:480px){
     .overview{grid-template-columns:1fr}
   }
+
+  .route{
+    margin-bottom:28px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--line);
+  }
+  .route-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .route-head h2{margin:0}
+  .route-views{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .route-view{
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:5px 12px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-2);
+    background:var(--paper);
+    cursor:pointer;
+    font-family:inherit;
+    line-height:1.4;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .route-view:hover{border-color:var(--line-2);color:var(--ink)}
+  .route-view.on{
+    background:var(--sea);
+    color:var(--sea-ink);
+    border-color:var(--sea-line);
+  }
+  #trip-map{
+    height:380px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    background:#eef3f1;
+  }
+  #trip-map .maplibregl-ctrl-group{
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:none;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  #trip-map .maplibregl-ctrl-group button{
+    width:30px;
+    height:30px;
+    background:var(--paper);
+  }
+  #trip-map .maplibregl-ctrl-group button+button{
+    border-top:1px solid var(--line);
+  }
+  #trip-map .maplibregl-ctrl-group button:hover{
+    background:var(--shell);
+  }
+  #trip-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon{
+    filter:none;
+    opacity:.55;
+  }
+  #trip-map .maplibregl-ctrl-attrib{
+    font-size:10px;
+    background:rgba(250,249,246,.88);
+    color:var(--ink-3);
+    border-radius:6px 0 0 0;
+  }
+  #trip-map .maplibregl-ctrl-attrib a{color:var(--ink-3)}
+  #trip-map .maplibregl-ctrl-logo{opacity:.45}
+  #trip-map .maplibregl-popup-content{
+    background:var(--paper);
+    color:var(--ink);
+    border:1px solid var(--line);
+    border-radius:8px;
+    box-shadow:0 4px 16px rgba(31,30,28,.08);
+    padding:7px 10px;
+    font-family:inherit;
+  }
+  #trip-map .maplibregl-popup-tip{
+    border-top-color:var(--paper);
+  }
+  #trip-map .maplibregl-popup-anchor-bottom .maplibregl-popup-tip{
+    border-top-color:var(--paper);
+    border-bottom-color:transparent;
+  }
+  .map-places{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 8px;
+    margin-top:10px;
+  }
+  .map-place{
+    border:1px solid transparent;
+    background:none;
+    padding:4px 8px;
+    font-size:12px;
+    color:var(--ink-2);
+    cursor:pointer;
+    border-radius:6px;
+    font-family:inherit;
+    line-height:1.35;
+  }
+  .map-place:hover{background:var(--shell);color:var(--ink)}
+  .map-place.on{
+    background:var(--sea);
+    color:var(--sea-ink);
+    border-color:var(--sea-line);
+  }
+  .m-pin{
+    position:relative;
+    cursor:pointer;
+  }
+  .m-pin.hub{width:26px;height:26px}
+  .m-pin.dot{width:12px;height:12px}
+  .m-pin.port{width:8px;height:8px}
+  .m-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    border:2px solid #fff;
+    box-shadow:0 1px 4px rgba(31,30,28,.18);
+    background:var(--isle-ink);
+  }
+  .m-dot.sea{background:var(--sea-ink)}
+  .m-pin.port .m-dot{
+    width:8px;
+    height:8px;
+    opacity:.8;
+  }
+  .m-hub{
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:700;
+    color:#fff;
+    border-radius:50%;
+    border:2px solid #fff;
+    box-shadow:0 1px 5px rgba(31,30,28,.2);
+    background:var(--sea-ink);
+  }
+  .m-label{
+    position:absolute;
+    top:calc(100% + 5px);
+    left:50%;
+    transform:translateX(-50%);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:2px 7px;
+    white-space:nowrap;
+    box-shadow:0 1px 3px rgba(31,30,28,.06);
+    pointer-events:none;
+  }
+  .map-tip{
+    font-size:12px;
+    line-height:1.4;
+    color:var(--ink);
+  }
+  .map-tip b{display:block;font-weight:600;margin-bottom:1px}
+
+  @media (max-width:820px){
+    #trip-map{height:280px}
+    .route-head{flex-direction:column;align-items:flex-start;gap:8px}
+  }
   @media print{
     body{background:#fff}
     .sheet{margin:0;border:none;border-radius:0;padding:0;max-width:none}
+    .route{display:none}
     .cell{min-height:120px}
+    .check input:checked + .box,
+    .todo-sub-head input:checked + .box,
+    .pill.sea,.pill.isle,.pill.sand,.tag-book,.tag-walk{
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+    }
     @page{size:A4 landscape;margin:12mm}
   }
 </style>
@@ -367,6 +706,19 @@
       <p class="sub">Athens, Sifnos, Milos</p>
     </div>
   </header>
+
+  <section class="route" aria-label="Trip route map">
+    <div class="route-head">
+      <h2>Route</h2>
+      <div class="route-views" role="tablist" aria-label="Map views">
+        <button type="button" class="route-view on" data-view="trip" role="tab" aria-selected="true">Trip</button>
+        <button type="button" class="route-view" data-view="sifnos" role="tab" aria-selected="false">Sifnos</button>
+        <button type="button" class="route-view" data-view="milos" role="tab" aria-selected="false">Milos</button>
+      </div>
+    </div>
+    <div id="trip-map" role="tabpanel" aria-label="Interactive map"></div>
+    <div class="map-places" id="map-places" aria-label="Places on this view"></div>
+  </section>
 
   <div class="flights">
     <div class="flights-head">
@@ -398,13 +750,13 @@
     </div>
     <div class="tile t-sif">
       <div class="tile-k">Sifnos</div>
-      <div class="tile-d">13–17 Sep · 4 nights</div>
+      <div class="tile-d">13–16 Sep · 3 nights</div>
       <p>Quiet villages, food, hiking, and beaches. Traditional, unhurried.</p>
       <div class="tile-stay">Stay · to book</div>
     </div>
     <div class="tile t-mil">
       <div class="tile-k">Milos</div>
-      <div class="tile-d">17–19 Sep · 2 nights</div>
+      <div class="tile-d">16–19 Sep · 3 nights</div>
       <p>Boat tour, volcanic beaches, and villages. More adventurous scenery.</p>
       <div class="tile-stay">Stay · to book</div>
     </div>
@@ -420,7 +772,7 @@
     <b>Sifnos</b> is the quiet one: villages, hiking, and food.
     <b>Milos</b> is the adventurous one: beaches, boat tours, volcanic rock.
     Both skip the crowds and prices of Santorini or Mykonos.
-    The calendar uses <b>4 nights Sifnos + 2 Milos</b>; the other good split is 3 + 3 (ferry on 16 Sep).
+    The calendar is locked to <b>3 nights Sifnos + 3 Milos</b>, ferry on Wed 16 Sep.
     Confirm sailings on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a>.
   </p>
 
@@ -474,33 +826,33 @@
 
     <div class="cell">
       <div class="num"><span class="wd">Tue</span>15</div>
-      <div class="chip c-isle"><b>Sifnos</b>Kastro</div>
-      <div class="plain">Medieval lanes and sea views. Walk down to Chrysopigi.</div>
+      <div class="chip c-isle"><b>Sifnos</b>Kastro, beach</div>
+      <div class="plain">Kastro and Chrysopigi in the morning. Platis Gialos or Vathi in the afternoon.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Wed</span>16</div>
-      <div class="chip c-isle"><b>Sifnos</b>Beach day</div>
-      <div class="plain">Platis Gialos, Vathi, or a quiet cove. Scooter or car helps.</div>
+      <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos, 35 to 60 min</div>
+      <div class="chip c-isle"><b>Milos</b>Sarakiniko, Plaka</div>
+      <div class="plain">Morning ferry. Afternoon at Sarakiniko, Plaka for sunset.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Thu</span>17</div>
-      <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos, 35 to 60 min</div>
-      <div class="plain">Arrive Adamas. Afternoon at Sarakiniko.</div>
+      <div class="chip c-isle"><b>Milos</b>Boat tour</div>
+      <div class="plain">Full day to Kleftiko caves. Weather backup: Fri.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Fri</span>18</div>
-      <div class="chip c-isle"><b>Milos</b>Boat tour</div>
-      <div class="plain">Full day to Kleftiko caves. Plaka village for sunset.</div>
+      <div class="chip c-isle"><b>Milos</b>Firiplaka, Klima</div>
+      <div class="plain">South coast and fishing villages. Pollonia if time.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Sat</span>19</div>
-      <div class="chip c-isle"><b>Milos</b>Firiplaka, Klima</div>
       <div class="chip c-sea"><b>Ferry</b>Milos → Piraeus, late afternoon</div>
-      <div class="plain">Head toward the airport. Night flight.</div>
+      <div class="plain">Quiet morning, drop scooter, head toward the airport. Night flight.</div>
     </div>
 
     <div class="cell">
@@ -533,7 +885,7 @@
     <span><i class="swatch" style="background:#bcd7e6"></i>Flights and ferries</span>
     <span><i class="swatch" style="background:#d3dec6"></i>Islands</span>
     <span><i class="swatch" style="background:#ecd8b6"></i>Holidays</span>
-    <span class="spacer">2 nights Athens · 4 nights Sifnos · 2 nights Milos</span>
+    <span class="spacer">2 nights Athens · 3 nights Sifnos · 3 nights Milos</span>
   </div>
 
   <div class="notes">
@@ -556,18 +908,18 @@
       </div>
 
       <div class="row">
-        <div class="when">Mon 14 to Wed 16<span>Sifnos</span></div>
-        <div class="what">Apollonia and Artemonas villages, <b>Kastro</b> for the medieval feel and the views, walking paths between villages or down to Chrysopigi Monastery, beaches at Platis Gialos and Vathi or quieter coves, pottery workshops, and very good local food such as chickpea dishes and seafood. A scooter or small car gives you freedom. Quiet and authentic.</div>
+        <div class="when">Mon 14 to Tue 15<span>Sifnos</span></div>
+        <div class="what">Apollonia and Artemonas villages, pottery workshops, and very good local food such as chickpea dishes and seafood. On Tuesday, <b>Kastro</b> for the medieval feel and the views, walking down to Chrysopigi Monastery, then a beach afternoon at Platis Gialos or Vathi. A scooter or small car gives you freedom. Quiet and authentic.</div>
       </div>
 
       <div class="row">
-        <div class="when">Thu 17 Sep<span>Sifnos to Milos</span></div>
-        <div class="what">Short ferry <b>Sifnos → Milos</b>. Arrive at Adamas. You can also move a day earlier on 16 Sep if you want more time on Milos.</div>
+        <div class="when">Wed 16 Sep<span>Sifnos to Milos</span></div>
+        <div class="what">Morning ferry <b>Sifnos → Milos</b>. Drop the Sifnos scooter at Kamares, pick up at Adamas. Afternoon at <b>Sarakiniko</b>, then <b>Plaka</b> for sunset. Easy dinner in Adamas.</div>
       </div>
 
       <div class="row">
         <div class="when">Thu 17 to Sat 19<span>Milos</span></div>
-        <div class="what"><b>Full day boat tour</b> for the Kleftiko caves and the coastline. Sarakiniko for the white volcanic rock, Firiplaka and other beaches, Pollonia fishing village, Plaka village at sunset, and Klima with the colourful boat houses. A scooter makes the beaches much easier, so <b>would you hop with me on one?</b></div>
+        <div class="what"><b>Thursday: full-day boat tour</b> to Kleftiko caves and the coastline — leave the scooter in Adamas. If wind cancels it, swap Thursday and Friday. <b>Friday:</b> Firiplaka, Klima, and Pollonia, the spread-out land day. <b>Saturday:</b> quiet morning, drop the scooter, afternoon ferry to Piraeus. A scooter makes the beaches much easier, so <b>would you hop with me on one?</b></div>
       </div>
 
       <div class="row">
@@ -622,12 +974,230 @@
       </div>
     </div>
 
+    <div class="todo-head">
+      <h2>Still to do</h2>
+      <p><b id="todo-done">0</b> of <span id="todo-total">0</span> done · ticks stay on this device</p>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="todo-bar"></i></div>
+
+    <div class="tasks" id="todo">
+
+      <div class="task" data-task="flights">
+        <label class="check">
+          <input type="checkbox" data-id="flights">
+          <span class="box"></span>
+          <span class="check-title">Buy flights</span>
+        </label>
+        <p class="check-note">Israir, both nonstop, 1 free carry-on. Outbound <b>Fri 11 Sep</b> TLV → ATH 11:10–13:25. Return <b>Sun 20 Sep</b> ATH → TLV 00:30–02:30. Open the <a href="https://www.google.com/travel/flights/s/siEBEBifjAYKt1C19" target="_blank" rel="noopener">Google Flights</a> search and lock them in.</p>
+      </div>
+
+      <div class="task" data-task="ferries">
+        <label class="check">
+          <input type="checkbox" data-id="ferries" data-kids="ferries-out,ferries-islands,ferries-back">
+          <span class="box"></span>
+          <span class="check-title">Book ferries</span>
+        </label>
+        <p class="check-note">Three legs, all on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a>. Prefer daylight sailings. Recheck a few days before — wind can shift the timetable.</p>
+        <div class="todo-subs">
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="ferries-out">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sun 13 Sep · Piraeus → Sifnos</span>
+            </label>
+            <p class="todo-sub-note">Morning sailing after Athens checkout. High-speed often 2.5 to 3 hours, ~€70 pp. Land at Kamares, settle in Apollonia.</p>
+            <div class="pills">
+              <span class="pill sea">Sun 13 · after Athens checkout</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="ferries-islands">
+              <span class="box"></span>
+              <span class="todo-sub-title">Wed 16 Sep · Sifnos → Milos</span>
+            </label>
+            <p class="todo-sub-note">Morning or midday high-speed, ~40 to 45 min, ~€15 pp. Drop Sifnos scooter at Kamares, pick up at Adamas. Still time for Sarakiniko that afternoon.</p>
+            <div class="pills">
+              <span class="pill sea">Wed 16 · island hop</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="ferries-back">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sat 19 Sep · Milos → Piraeus</span>
+            </label>
+            <p class="todo-sub-note">The critical leg before the night flight. Afternoon high-speed, 3 to 4 hours, ~€80 pp. Drop scooter at Adamas first, then head to the airport.</p>
+            <div class="pills">
+              <span class="pill sea">Sat 19 · before ATH 00:30</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-task="hotels">
+        <label class="check">
+          <input type="checkbox" data-id="hotels" data-kids="hotels-athens,hotels-sifnos,hotels-milos">
+          <span class="box"></span>
+          <span class="check-title">Book hotels</span>
+        </label>
+        <p class="check-note">One stay per place. Book all three now. Stay walkable in Athens, village-central on Sifnos, and near the port or Plaka on Milos.</p>
+        <div class="todo-subs">
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="hotels-athens">
+              <span class="box"></span>
+              <span class="todo-sub-title">Athens · Plaka, Koukaki, or Acropolis</span>
+            </label>
+            <p class="todo-sub-note">2 nights, check in Fri 11 (land 13:25), check out Sun 13 for the Sifnos ferry. Walk to the sites, easy metro from the airport.</p>
+            <div class="pills">
+              <span class="pill sand">Fri 11 · arrival</span>
+              <span class="pill sand">Sat 12 · Acropolis</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="hotels-sifnos">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sifnos · Apollonia or Artemonas</span>
+            </label>
+            <p class="todo-sub-note">3 nights, Sun 13 – Wed 16. Apollonia and Artemonas are walkable and close to food. Kastro if you want quieter nights and the view.</p>
+            <div class="pills">
+              <span class="pill isle">Sun 13 · Kamares arrival</span>
+              <span class="pill isle">Mon 14 · villages</span>
+              <span class="pill isle">Tue 15 · Kastro &amp; beach</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="hotels-milos">
+              <span class="box"></span>
+              <span class="todo-sub-title">Milos · Adamas or Plaka</span>
+            </label>
+            <p class="todo-sub-note">3 nights Wed 16 – Sat 19. Adamas is easiest: port, scooter desks, boat tours. Plaka is the sunset village, a short ride up the hill. Last night needs a sane Saturday morning before the Piraeus ferry.</p>
+            <div class="pills">
+              <span class="pill sea">Wed 16 · Sarakiniko arrival</span>
+              <span class="pill sea">Thu 17 · boat tour</span>
+              <span class="pill sea">Fri 18 · Firiplaka &amp; Klima</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-task="scooters">
+        <label class="check">
+          <input type="checkbox" data-id="scooters" data-kids="scooters-sifnos,scooters-milos">
+          <span class="box"></span>
+          <span class="check-title">Book scooter rentals</span>
+        </label>
+        <p class="check-note">Skip Athens. On both islands a scooter (or a small car) is how you actually reach the beaches. Book ahead for mid-September; pickup at the port on arrival, drop before the next ferry. Helmets are required, and a proper licence for 125cc.</p>
+        <div class="todo-subs">
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="scooters-sifnos">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sifnos · pickup Kamares port</span>
+            </label>
+            <p class="todo-sub-note">Collect on Sun 13 when the ferry lands, drop at Kamares on Wed 16. Needed for Platis Gialos, Vathi, Chrysopigi, and Faros. Apollonia to Artemonas is a walk; Kastro is a short hop. Offices in Kamares and Apollonia will deliver to the port.</p>
+            <div class="pills">
+              <span class="pill isle">Sun 13 · pick up</span>
+              <span class="pill isle">Beaches &amp; villages</span>
+              <span class="pill isle">Wed 16 · drop at Kamares</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="scooters-milos">
+              <span class="box"></span>
+              <span class="todo-sub-title">Milos · pickup Adamas port</span>
+            </label>
+            <p class="todo-sub-note">Collect Wed 16 at Adamas, drop Sat 19 before the Piraeus ferry. This one matters more than Sifnos: Sarakiniko, Firiplaka, Klima, Plaka, and Pollonia are spread out. On the boat-tour day you can leave it in Adamas. Several desks sit right at the port.</p>
+            <div class="pills">
+              <span class="pill sea">Wed 16 · Adamas pickup</span>
+              <span class="pill sea">Thu 17 · leave in port (boat day)</span>
+              <span class="pill sea">Fri 18 · Firiplaka · Klima · Pollonia</span>
+              <span class="pill sea">Sat 19 · drop before ferry</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task" data-task="food">
+        <label class="check">
+          <input type="checkbox" data-id="food" data-kids="food-athens,food-liotrivi,food-drakakis,food-hamos,food-barko">
+          <span class="box"></span>
+          <span class="check-title">Must-try restaurants</span>
+        </label>
+        <p class="check-note">Village tavernas, not the fancy rooms. Think <b>€15–25 a head</b> with wine, homemade pots, and fried fish. A couple are worth a phone call; the rest are walk-in. Skip the main Plaka tourist strip and anyone waving a menu at you.</p>
+        <div class="todo-subs">
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="food-athens">
+              <span class="box"></span>
+              <span class="todo-sub-title">Athens · Taverna Saita, Plaka <span class="tag tag-book">Book</span></span>
+            </label>
+            <p class="todo-sub-note">Hole-in-the-wall on the quiet end of Kydathineon, about <b>€15–20</b>. Bakaliaros with skordalia, lamb, ekmek. Call <a href="tel:+302103226671">+30 210 322 6671</a> for Saturday after the Acropolis. Friday can be walk-in, or the basement next door: <b>Bakaliarakia tou Damigou</b> (fried cod, since 1865, no fuss).</p>
+            <div class="pills">
+              <span class="pill sand">Fri 11 · Damigos or Saita</span>
+              <span class="pill sand">Sat 12 · book Saita</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="food-liotrivi">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sifnos · Liotrivi, Artemonas square <span class="tag tag-book">Book</span></span>
+            </label>
+            <p class="todo-sub-note">Old family taverna on the square, about <b>€15–20</b>. This is the Sifnos food: <b>revithada</b> (Sunday chickpea stew), mastelo, caper salad, barrel wine. Pair it with a village evening. Ask for a table when you arrive, or call <a href="tel:+302284031921">+30 22840 31921</a>.</p>
+            <div class="pills">
+              <span class="pill isle">Mon 14 or Tue 15 · villages</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="food-drakakis">
+              <span class="box"></span>
+              <span class="todo-sub-title">Sifnos · Drakakis, Apollonia <span class="tag tag-walk">No booking</span></span>
+            </label>
+            <p class="todo-sub-note">Old kafeneio on the main lane. Meze, beer, house wine, cats. Go around 19:00. Beach day alternative: <b>To Steki</b> on the sand at Platis Gialos, traditional pots and fish, same price band, skip the tiny fish-bar next door.</p>
+            <div class="pills">
+              <span class="pill isle">Sun 13 · arrival night</span>
+              <span class="pill isle">Tue 15 · beach day</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="food-hamos">
+              <span class="box"></span>
+              <span class="todo-sub-title">Milos · O! Hamos!, Adamas <span class="tag tag-walk">No booking</span></span>
+            </label>
+            <p class="todo-sub-note">Farm taverna by Papikinou, not a white-tablecloth place. Slow-cooked goat, chickpeas, garden food. They do not take reservations. Arrive around 19:00; drink across the road if there is a wait.</p>
+            <div class="pills">
+              <span class="pill sea">Fri 18 · go early</span>
+            </div>
+          </div>
+          <div class="todo-sub">
+            <label class="todo-sub-head">
+              <input type="checkbox" data-id="food-barko">
+              <span class="box"></span>
+              <span class="todo-sub-title">Milos · Barko, Adamas <span class="tag tag-book">Book</span></span>
+            </label>
+            <p class="todo-sub-note">Family courtyard under the vines since 1993, the easy-value table in town: fava, lamb chops, zucchini fritters. Call <a href="tel:+302287022660">+30 22870 22660</a> or see <a href="https://barkotavernmilos.com/en/" target="_blank" rel="noopener">barkotavernmilos.com</a>. Cheap lunch: gyros in Adamas and keep moving.</p>
+            <div class="pills">
+              <span class="pill sea">Wed 16 · arrival night</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <div class="tips">
       <b>Worth planning ahead</b>
       <ul>
         <li>Book flights, hotels, and ferries early. The Milos to Piraeus ferry on 19 Sep is the one leg that has to work, since the flight is the same night.</li>
         <li>Sifnos and Milos ferries can be cancelled in strong wind. Keep the last night flexible in case you need to return to Athens a day early, and recheck times a few days before you travel.</li>
-        <li>Acropolis tickets are timed. Buy them before the trip and go for the first slot: the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">site is €30</a> (Digital Guide app included) and the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">museum is €20</a>. Or both in one on <a href="https://www.getyourguide.com/athens-l91/acropolis-and-acropolis-museum-tour-t181448/" target="_blank" rel="noopener">GetYourGuide</a> for ₪174 / €50, without entry tickets.</li>
+        <li>Acropolis tickets are timed. Buy them before the trip and go for the first slot: the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">site is €30</a> (Digital Guide app included) and the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">museum is €20</a>.</li>
         <li>Book scooters or cars in advance for both islands.</li>
         <li>Cards work almost everywhere. Carry a little cash for small shops and taxis.</li>
       </ul>
@@ -646,5 +1216,345 @@
   </div>
 
 </div>
+<script src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js" crossorigin=""></script>
+<script>
+(function(){
+  if (!window.maplibregl || !document.getElementById("trip-map")) return;
+
+  var places = [
+    { id: "athens", name: "Athens", lat: 37.9715, lng: 23.7267, day: "11–12 Sep", kind: "hub", num: 1, views: ["trip"] },
+    { id: "piraeus", name: "Piraeus", lat: 37.9475, lng: 23.6374, day: "Ferry port", kind: "port", views: ["trip"] },
+    { id: "kamares", name: "Kamares", lat: 36.9923, lng: 24.6667, day: "Arrive 13 Sep", kind: "sea", views: ["trip", "sifnos"] },
+    { id: "apollonia", name: "Apollonia", lat: 36.9736, lng: 24.7236, day: "Base · 14 Sep", kind: "hub", num: 2, views: ["trip", "sifnos"] },
+    { id: "artemonas", name: "Artemonas", lat: 36.9789, lng: 24.7312, day: "14 Sep", kind: "isle", views: ["sifnos"] },
+    { id: "kastro", name: "Kastro", lat: 36.9744, lng: 24.7453, day: "15 Sep", kind: "isle", views: ["sifnos"] },
+    { id: "chrysopigi", name: "Chrysopigi", lat: 36.9472, lng: 24.7148, day: "15 Sep", kind: "isle", views: ["sifnos"] },
+    { id: "platis-gialos", name: "Platis Gialos", lat: 36.9365, lng: 24.7260, day: "15 Sep", kind: "isle", views: ["sifnos"] },
+    { id: "vathi", name: "Vathi", lat: 36.9680, lng: 24.6280, day: "15 Sep", kind: "isle", views: ["sifnos"] },
+    { id: "adamas", name: "Adamas", lat: 36.7260, lng: 24.4469, day: "Arrive 16 Sep", kind: "hub", num: 3, views: ["trip", "milos"] },
+    { id: "sarakiniko", name: "Sarakiniko", lat: 36.7490, lng: 24.4680, day: "16 Sep", kind: "isle", views: ["milos"] },
+    { id: "kleftiko", name: "Kleftiko", lat: 36.6360, lng: 24.3520, day: "17 Sep · boat", kind: "sea", views: ["milos"] },
+    { id: "plaka", name: "Plaka", lat: 36.7454, lng: 24.4265, day: "16 Sep sunset", kind: "isle", views: ["milos"] },
+    { id: "firiplaka", name: "Firiplaka", lat: 36.6890, lng: 24.5150, day: "18 Sep", kind: "isle", views: ["milos"] },
+    { id: "klima", name: "Klima", lat: 36.7380, lng: 24.4250, day: "18 Sep", kind: "isle", views: ["milos"] },
+    { id: "pollonia", name: "Pollonia", lat: 36.7660, lng: 24.5200, day: "18 Sep", kind: "isle", views: ["milos"] }
+  ];
+
+  var routes = [
+    { id: "ferry-out", from: "piraeus", to: "kamares", views: ["trip"], bulge: 0.12 },
+    { id: "ferry-islands", from: "kamares", to: "adamas", views: ["trip"], bulge: 0.18 },
+    { id: "ferry-back", from: "adamas", to: "piraeus", views: ["trip"], bulge: -0.1 },
+    { id: "boat-kleftiko", from: "adamas", to: "kleftiko", views: ["milos"], bulge: -0.16 }
+  ];
+
+  var viewBounds = {
+    trip: [[23.45, 36.55], [25.05, 38.05]],
+    sifnos: [[24.58, 36.915], [24.78, 37.015]],
+    milos: [[24.30, 36.60], [24.55, 36.80]]
+  };
+
+  var placeById = {};
+  places.forEach(function(p){ placeById[p.id] = p; });
+
+  var map = new maplibregl.Map({
+    container: "trip-map",
+    style: "https://tiles.openfreemap.org/styles/positron",
+    center: [24.2, 37.3],
+    zoom: 7,
+    minZoom: 5,
+    maxZoom: 14,
+    attributionControl: false,
+    scrollZoom: false,
+    pitchWithRotate: false,
+    dragRotate: false
+  });
+
+  map.touchZoomRotate.disableRotation();
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+
+  var popup = new maplibregl.Popup({
+    closeButton: false,
+    offset: 18,
+    maxWidth: "200px"
+  });
+
+  var markers = {};
+  var activePlace = null;
+  var currentView = "trip";
+
+  function curve(from, to, bulge){
+    var lng1 = from.lng, lat1 = from.lat;
+    var lng2 = to.lng, lat2 = to.lat;
+    var mx = (lng1 + lng2) / 2;
+    var my = (lat1 + lat2) / 2;
+    var cx = mx - (lat2 - lat1) * bulge;
+    var cy = my + (lng2 - lng1) * bulge;
+    var pts = [];
+    for (var i = 0; i <= 24; i++){
+      var t = i / 24;
+      var a = (1 - t) * (1 - t);
+      var b = 2 * (1 - t) * t;
+      var c = t * t;
+      pts.push([a * lng1 + b * cx + c * lng2, a * lat1 + b * cy + c * lat2]);
+    }
+    return pts;
+  }
+
+  function routesGeoJSON(view){
+    return {
+      type: "FeatureCollection",
+      features: routes.filter(function(r){ return r.views.indexOf(view) !== -1; }).map(function(route){
+        return {
+          type: "Feature",
+          properties: { id: route.id },
+          geometry: {
+            type: "LineString",
+            coordinates: curve(placeById[route.from], placeById[route.to], route.bulge || 0)
+          }
+        };
+      })
+    };
+  }
+
+  function markerEl(place){
+    var wrap = document.createElement("div");
+    wrap.className = "m-pin " + (place.kind === "hub" ? "hub" : place.kind === "port" ? "port" : "dot");
+    if (place.kind === "hub"){
+      var hub = document.createElement("div");
+      hub.className = "m-hub";
+      hub.textContent = place.num;
+      wrap.appendChild(hub);
+    } else {
+      var dot = document.createElement("div");
+      dot.className = "m-dot" + (place.kind === "isle" ? "" : " sea");
+      wrap.appendChild(dot);
+    }
+    if (place.kind !== "port"){
+      var label = document.createElement("span");
+      label.className = "m-label";
+      label.textContent = place.name;
+      wrap.appendChild(label);
+    }
+    wrap.addEventListener("click", function(e){
+      e.stopPropagation();
+      focusPlace(place.id, false);
+    });
+    return wrap;
+  }
+
+  places.forEach(function(place){
+    markers[place.id] = new maplibregl.Marker({
+      element: markerEl(place),
+      anchor: "center"
+    }).setLngLat([place.lng, place.lat]);
+  });
+
+  function setActivePlace(id){
+    activePlace = id || null;
+    document.querySelectorAll(".map-place").forEach(function(btn){
+      btn.classList.toggle("on", btn.getAttribute("data-id") === id);
+    });
+  }
+
+  function focusPlace(id, zoomIn){
+    var place = placeById[id];
+    if (!place) return;
+    setActivePlace(id);
+    if (zoomIn){
+      map.easeTo({
+        center: [place.lng, place.lat],
+        zoom: Math.max(map.getZoom(), currentView === "trip" ? 9 : 12),
+        duration: 500
+      });
+    } else {
+      map.easeTo({ center: [place.lng, place.lat], duration: 400 });
+    }
+    popup.setLngLat([place.lng, place.lat])
+      .setHTML("<div class=\"map-tip\"><b>" + place.name + "</b>" + place.day + "</div>")
+      .addTo(map);
+  }
+
+  function renderPlaceList(view){
+    var list = document.getElementById("map-places");
+    if (!list) return;
+    list.innerHTML = "";
+    places.filter(function(p){ return p.views.indexOf(view) !== -1; }).forEach(function(place){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "map-place";
+      btn.setAttribute("data-id", place.id);
+      btn.textContent = place.name;
+      btn.addEventListener("click", function(){
+        focusPlace(place.id, true);
+      });
+      list.appendChild(btn);
+    });
+    setActivePlace(activePlace);
+  }
+
+  function tintBasemap(){
+    var paints = {
+      background: { "background-color": "#f4f2ec" },
+      water: { "fill-color": "#d5e4ee" },
+      waterway: { "line-color": "#c5d8e4" },
+      park: { "fill-color": "#e7eee0" },
+      landcover_wood: { "fill-color": "#e3eadb" },
+      landuse_residential: { "fill-color": "#f1efe8" },
+      building: { "fill-color": "#eceae3", "fill-outline-color": "#ddd9cf" },
+      label_city: { "text-color": "#5c5a54", "text-halo-color": "rgba(255,255,255,0.9)" },
+      label_town: { "text-color": "#5c5a54", "text-halo-color": "rgba(255,255,255,0.9)" },
+      label_village: { "text-color": "#8f8d85", "text-halo-color": "rgba(255,255,255,0.9)" },
+      label_country_1: { "text-color": "#8f8d85" },
+      label_country_2: { "text-color": "#8f8d85" },
+      water_name_point_label: { "text-color": "#6b8494" },
+      water_name_line_label: { "text-color": "#6b8494" }
+    };
+    Object.keys(paints).forEach(function(id){
+      if (!map.getLayer(id)) return;
+      Object.keys(paints[id]).forEach(function(prop){
+        map.setPaintProperty(id, prop, paints[id][prop]);
+      });
+    });
+  }
+
+  function setView(view){
+    currentView = view;
+    popup.remove();
+
+    places.forEach(function(place){
+      var marker = markers[place.id];
+      var show = place.views.indexOf(view) !== -1;
+      if (show && !marker._map) marker.addTo(map);
+      if (!show && marker._map) marker.remove();
+    });
+
+    if (map.getSource("routes")){
+      map.getSource("routes").setData(routesGeoJSON(view));
+    }
+
+    document.querySelectorAll(".route-view").forEach(function(btn){
+      var on = btn.getAttribute("data-view") === view;
+      btn.classList.toggle("on", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+
+    renderPlaceList(view);
+    map.fitBounds(viewBounds[view], { padding: 40, duration: 700 });
+    setActivePlace(null);
+  }
+
+  map.on("load", function(){
+    tintBasemap();
+    map.addSource("routes", { type: "geojson", data: routesGeoJSON("trip") });
+    map.addLayer({
+      id: "routes-glow",
+      type: "line",
+      source: "routes",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": "#bcd7e6",
+        "line-width": 6,
+        "line-opacity": 0.55
+      }
+    });
+    map.addLayer({
+      id: "routes",
+      type: "line",
+      source: "routes",
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": "#1b5273",
+        "line-width": 1.8,
+        "line-opacity": 0.85,
+        "line-dasharray": [1.6, 1.4]
+      }
+    });
+    setView("trip");
+  });
+
+  document.querySelectorAll(".route-view").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      setView(btn.getAttribute("data-view"));
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  var KEY = "vwt-todo-2026";
+  var root = document.getElementById("todo");
+  if (!root) return;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); }
+    catch (e) { return {}; }
+  }
+  function save(state){
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+
+  var state = load();
+  var boxes = [].slice.call(root.querySelectorAll("input[type=checkbox][data-id]"));
+
+  boxes.forEach(function(box){
+    box.checked = !!state[box.getAttribute("data-id")];
+  });
+
+  function kidsOf(el){
+    var raw = el.getAttribute("data-kids");
+    if (!raw) return [];
+    return raw.split(",").map(function(id){
+      return root.querySelector("[data-id=\"" + id + "\"]");
+    }).filter(Boolean);
+  }
+
+  function syncParents(){
+    boxes.forEach(function(box){
+      var kids = kidsOf(box);
+      if (!kids.length) return;
+      var all = kids.every(function(k){ return k.checked; });
+      box.checked = all;
+      state[box.getAttribute("data-id")] = all;
+    });
+  }
+
+  function paint(){
+    var leaves = boxes.filter(function(b){ return !b.getAttribute("data-kids"); });
+    var total = leaves.length;
+    var done = leaves.filter(function(b){ return b.checked; }).length;
+    var doneEl = document.getElementById("todo-done");
+    var totalEl = document.getElementById("todo-total");
+    var bar = document.getElementById("todo-bar");
+    if (doneEl) doneEl.textContent = done;
+    if (totalEl) totalEl.textContent = total;
+    if (bar) bar.style.width = (total ? Math.round(done / total * 100) : 0) + "%";
+    boxes.forEach(function(box){
+      var task = box.closest(".task");
+      if (!task) return;
+      if (box === task.querySelector("input[data-id]")){
+        task.classList.toggle("is-done", box.checked);
+      }
+    });
+  }
+
+  root.addEventListener("change", function(e){
+    var box = e.target;
+    if (!box.matches("input[type=checkbox][data-id]")) return;
+    var id = box.getAttribute("data-id");
+    state[id] = box.checked;
+    kidsOf(box).forEach(function(kid){
+      kid.checked = box.checked;
+      state[kid.getAttribute("data-id")] = box.checked;
+    });
+    syncParents();
+    save(state);
+    paint();
+  });
+
+  syncParents();
+  paint();
+})();
+</script>
 </body>
 </html>
