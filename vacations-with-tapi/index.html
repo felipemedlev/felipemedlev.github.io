@@ -75,14 +75,6 @@
     letter-spacing:-0.02em;
   }
   .sub{margin:4px 0 0;color:var(--ink-2);font-size:14px}
-  .route{
-    text-align:right;
-    font-size:13px;
-    color:var(--ink-2);
-    line-height:1.7;
-    white-space:nowrap;
-  }
-  .route b{color:var(--ink);font-weight:600}
 
   .grid{
     display:grid;
@@ -252,6 +244,30 @@
     color:var(--ink-3);
   }
 
+  .flights{
+    margin-bottom:28px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--line);
+  }
+  .flights-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:12px;
+  }
+  .flights-head h2{margin:0}
+  .flights-head p{
+    margin:0;
+    font-size:13px;
+    color:var(--ink-2);
+  }
+  .flights .overview{
+    margin-bottom:0;
+    grid-template-columns:1fr 1fr;
+  }
+  .flight .tile-stay{border-top-color:var(--sea-line);color:var(--sea-ink)}
+
   .whisper{
     margin:0 0 28px;
     font-size:13px;
@@ -284,8 +300,9 @@
     }
     header{flex-direction:column;align-items:flex-start;gap:12px}
     h1{font-size:clamp(24px, 7vw, 30px);line-height:1.2}
-    .route{text-align:left;white-space:normal}
+    .flights-head{flex-direction:column;align-items:flex-start;gap:6px}
     .overview{grid-template-columns:1fr 1fr;gap:8px}
+    .flights .overview{grid-template-columns:1fr}
     .tile{padding:12px}
     .grid{grid-template-columns:1fr;gap:8px}
     .dow,.cell.empty,.cell.off{display:none}
@@ -349,11 +366,28 @@
       <h1>Greece, September 2026</h1>
       <p class="sub">Athens, Sifnos, Milos</p>
     </div>
-    <div class="route">
-      <b>Fri 11 Sep</b> · TLV → ATH · 11:10 to 13:25<br>
-      <b>Sun 20 Sep</b> · ATH → TLV · 00:30 to 02:30
-    </div>
   </header>
+
+  <div class="flights">
+    <div class="flights-head">
+      <h2>Flights</h2>
+      <p>Israir · 1 free carry-on · both nonstop · <a href="https://www.google.com/travel/flights/s/siEBEBifjAYKt1C19" target="_blank" rel="noopener">Google Flights</a></p>
+    </div>
+    <div class="overview">
+      <div class="tile t-mil flight">
+        <div class="tile-k">Outbound · nonstop</div>
+        <div class="tile-d">TLV → ATH</div>
+        <p><b>Fri 11 Sep</b> · 11:10 to 13:25 · 2h 15m</p>
+        <div class="tile-stay">Israir · 1 free carry-on</div>
+      </div>
+      <div class="tile t-mil flight">
+        <div class="tile-k">Return · nonstop</div>
+        <div class="tile-d">ATH → TLV</div>
+        <p><b>Sun 20 Sep</b> · 00:30 to 02:30 · 2h</p>
+        <div class="tile-stay">Israir · 1 free carry-on</div>
+      </div>
+    </div>
+  </div>
 
   <div class="overview">
     <div class="tile t-ath">
