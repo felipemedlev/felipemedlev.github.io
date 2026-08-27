@@ -1851,7 +1851,13 @@
     localStorage.setItem(KEY, JSON.stringify(state));
   }
 
-  var DEFAULTS = { flights: true };
+  var DEFAULTS = {
+    flights: true,
+    hotels: true,
+    "hotels-athens": true,
+    "hotels-sifnos": true,
+    "hotels-milos": true
+  };
   var state = load();
   var boxes = [].slice.call(root.querySelectorAll("input[type=checkbox][data-id]"));
 
