@@ -61,62 +61,126 @@
     box-shadow:var(--shadow-2);
   }
   header{
+    position:relative;
+    overflow:hidden;
     display:flex;
-    align-items:flex-end;
+    align-items:center;
     justify-content:space-between;
-    gap:24px;
-    padding:26px 28px 24px;
+    gap:28px;
+    padding:34px 32px 30px;
     margin-bottom:28px;
     border:1px solid var(--sea-line);
-    border-radius:14px;
+    border-radius:18px;
     background:
-      radial-gradient(120% 140% at 100% 0%, rgba(188,215,230,.45) 0%, rgba(232,241,247,0) 62%),
-      linear-gradient(180deg,#f7fbfd 0%,#ffffff 100%);
+      radial-gradient(80% 120% at 4% 108%, rgba(211,222,198,.42) 0%, rgba(211,222,198,0) 58%),
+      radial-gradient(110% 150% at 100% -10%, rgba(188,215,230,.55) 0%, rgba(232,241,247,0) 62%),
+      linear-gradient(180deg,#f6fafd 0%,#ffffff 74%);
+    box-shadow:var(--shadow-2);
+  }
+  header::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:3px;
+    background:linear-gradient(90deg,var(--sea-ink) 0%,#6f9bb5 38%,var(--isle-ink) 72%,var(--sand-ink) 100%);
+    opacity:.8;
   }
   .kicker{
-    margin:0 0 6px;
-    font-size:12px;
-    letter-spacing:0.1em;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    margin:0 0 12px;
+    font-size:11px;
+    letter-spacing:0.17em;
     text-transform:uppercase;
-    color:var(--ink-3);
+    color:var(--sea-ink);
     font-weight:600;
+  }
+  .kicker::before{
+    content:"";
+    width:20px;
+    height:1px;
+    background:currentColor;
+    opacity:.5;
   }
   h1{
     margin:0;
     font-family:var(--display);
-    font-size:42px;
+    font-size:clamp(40px,4.8vw,54px);
     font-weight:400;
-    line-height:1.04;
-    letter-spacing:-0.01em;
+    line-height:1.0;
+    letter-spacing:-0.015em;
   }
-  .sub{margin:7px 0 0;color:var(--ink-2);font-size:14px}
+  h1 .h1-date{
+    display:block;
+    margin-top:2px;
+    font-style:italic;
+    font-size:0.6em;
+    letter-spacing:-0.005em;
+    color:var(--sea-ink);
+  }
+
+  .sub{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:9px;
+    margin:16px 0 0;
+  }
+  .hop{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .hop::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:99px;
+    background:var(--ink-3);
+  }
+  .hop:not(:last-child)::after{
+    content:"";
+    width:18px;
+    height:1px;
+    margin-left:2px;
+    background:var(--line-2);
+  }
+  .hop-sif::before{background:var(--isle-ink)}
+  .hop-mil::before{background:var(--sea-ink)}
 
   .hero-stats{
     display:flex;
-    gap:10px;
     flex:0 0 auto;
+    border:1px solid var(--sea-line);
+    border-radius:14px;
+    background:rgba(255,255,255,.8);
+    box-shadow:var(--shadow-1);
+    overflow:hidden;
   }
   .stat{
-    min-width:74px;
-    padding:9px 12px 8px;
-    border:1px solid var(--sea-line);
-    border-radius:11px;
-    background:rgba(255,255,255,.72);
+    min-width:88px;
+    padding:13px 16px 12px;
     text-align:center;
   }
+  .stat + .stat{border-left:1px solid var(--sea-line)}
   .stat b{
     display:block;
     font-family:var(--display);
-    font-size:22px;
+    font-size:26px;
     font-weight:400;
-    line-height:1.1;
+    line-height:1.08;
+    letter-spacing:-0.01em;
     color:var(--sea-ink);
   }
   .stat span{
     display:block;
-    margin-top:2px;
-    font-size:10.5px;
-    letter-spacing:0.07em;
+    margin-top:3px;
+    font-size:10px;
+    letter-spacing:0.1em;
     text-transform:uppercase;
     font-weight:600;
     color:var(--ink-3);
@@ -142,7 +206,6 @@
     background:var(--paper);
   }
   .cell.empty{border:none;background:none;min-height:0}
-  .cell.off{background:#fbfaf7}
   .num{
     font-size:13px;
     font-weight:600;
@@ -150,7 +213,6 @@
     margin-bottom:6px;
   }
   .wd{display:none}
-  .cell.off .num{color:var(--ink-3);font-weight:500}
   .chip{
     border-radius:7px;
     padding:5px 7px;
@@ -339,6 +401,57 @@
     line-height:1.45;
   }
   .day-note b{color:var(--ink-2);font-weight:600}
+  .more{
+    margin:10px 0 0 78px;
+    background:var(--shell);
+    border:1px solid var(--line);
+    border-radius:10px;
+  }
+  .more summary{
+    list-style:none;
+    cursor:pointer;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--ink-3);
+    padding:10px 14px;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:inherit;
+  }
+  .more summary::-webkit-details-marker{display:none}
+  .more summary::marker{content:""}
+  .more summary::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-right:1.5px solid var(--ink-3);
+    border-bottom:1.5px solid var(--ink-3);
+    transform:rotate(-45deg);
+    transition:transform .15s ease;
+    flex:0 0 auto;
+  }
+  .more[open] summary::before{transform:rotate(45deg)}
+  .more summary:focus-visible{
+    outline:2px solid var(--sea-ink);
+    outline-offset:2px;
+    border-radius:8px;
+  }
+  .more-list{
+    margin:0;
+    padding:0 14px 12px;
+    list-style:none;
+  }
+  .more-list li{
+    font-size:13px;
+    color:var(--ink-2);
+    line-height:1.45;
+    padding:3px 0;
+  }
+  .more-list b{color:var(--ink);font-weight:600}
 
   .tips{
     margin-top:30px;
@@ -353,7 +466,6 @@
   .tips ul{margin:8px 0 0;padding-left:18px}
   .tips li{margin-bottom:5px}
   .tips li:last-child{margin-bottom:0}
-  .tips + .tips{margin-top:12px}
 
   a{color:var(--sea-ink);text-underline-offset:2px}
   a:hover{color:var(--ink)}
@@ -361,7 +473,7 @@
 
   .overview{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:10px;
     margin-bottom:14px;
   }
@@ -595,7 +707,6 @@
   .pill.sea{background:var(--sea);border-color:var(--sea-line);color:var(--sea-ink)}
   .pill.isle{background:var(--isle);border-color:var(--isle-line);color:var(--isle-ink)}
   .pill.sand{background:var(--sand);border-color:var(--sand-line);color:var(--sand-ink)}
-  .pill.opt{border-style:dashed;font-weight:500}
   .tag{
     display:inline-block;
     font-size:10.5px;
@@ -633,10 +744,14 @@
       border-radius:0;
       padding:max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
     }
-    header{flex-direction:column;align-items:flex-start;gap:16px;padding:20px 18px 18px}
-    h1{font-size:clamp(32px, 10vw, 42px);line-height:1.05}
+    header{flex-direction:column;align-items:stretch;gap:18px;padding:24px 18px 20px;border-radius:14px}
+    h1{font-size:clamp(34px, 11vw, 46px);line-height:1.02}
+    .kicker{margin-bottom:10px}
+    .sub{margin-top:14px}
     .hero-stats{width:100%}
-    .stat{flex:1 1 0;min-width:0}
+    .stat{flex:1 1 0;min-width:0;padding:11px 8px 10px}
+    .stat b{font-size:21px}
+    .stat span{font-size:9.5px;letter-spacing:0.08em}
     .flights-head,.todo-head{flex-direction:column;align-items:flex-start;gap:6px}
     .todo-subs{margin-left:12px;margin-right:8px}
     .check-note{margin-left:12px;margin-right:10px}
@@ -644,7 +759,7 @@
     .flights .overview{grid-template-columns:1fr}
     .tile{padding:12px}
     .grid{grid-template-columns:1fr;gap:8px}
-    .dow,.cell.empty,.cell.off{display:none}
+    .dow,.cell.empty{display:none}
     .cell{
       min-height:0;
       display:grid;
@@ -688,7 +803,7 @@
     .tl li{grid-template-columns:42px 1fr;column-gap:22px}
     .tl li::before{left:45px}
     .tl-d{font-size:14px}
-    .day-note{margin-left:64px}
+    .day-note,.more{margin-left:64px}
     .pack{grid-template-columns:1fr;gap:0}
     .tips{padding:16px}
     .whisper{font-size:14px}
@@ -879,10 +994,13 @@
     .sheet{margin:0;border:none;border-radius:0;padding:0;max-width:none;box-shadow:none}
     .route{display:none}
     .cell{min-height:120px}
-    header{border-radius:0;background:none;border:none;border-bottom:1px solid var(--line)}
-    .day,.tile{box-shadow:none;break-inside:avoid}
+    header{border-radius:0;background:none;border:none;border-bottom:1px solid var(--line);box-shadow:none;padding:0 0 18px}
+    header::before{display:none}
+    .hero-stats{box-shadow:none}
+    .day,.tile,.more{box-shadow:none;break-inside:avoid}
     .check input:checked + .box,
     .todo-sub-head input:checked + .box,
+    .hop::before,
     .pill.sea,.pill.isle,.pill.sand,.tag-book,.tag-walk{
       -webkit-print-color-adjust:exact;
       print-color-adjust:exact;
@@ -897,8 +1015,12 @@
   <header>
     <div>
       <p class="kicker">Vacations with Tapi</p>
-      <h1>Greece, September 2026</h1>
-      <p class="sub">Athens · Sifnos · Milos</p>
+      <h1>Greece<span class="h1-date">September 2026</span></h1>
+      <p class="sub">
+        <span class="hop hop-ath">Athens</span>
+        <span class="hop hop-sif">Sifnos</span>
+        <span class="hop hop-mil">Milos</span>
+      </p>
     </div>
     <div class="hero-stats">
       <div class="stat"><b>9</b><span>Days</span></div>
@@ -945,35 +1067,26 @@
     <div class="tile t-ath">
       <div class="tile-k">Athens</div>
       <div class="tile-d">11–13 Sep · 2 nights</div>
-      <p>Acropolis essentials and neighbourhoods. Mouseio base, walk to Plaka.</p>
+      <p>Acropolis and neighbourhoods. Walk to Plaka.</p>
       <div class="tile-stay">Emper by Zoia Living · Ioulianou 7</div>
     </div>
     <div class="tile t-sif">
       <div class="tile-k">Sifnos</div>
       <div class="tile-d">13–16 Sep · 3 nights</div>
-      <p>Quiet villages, food, hiking, and beaches. Traditional, unhurried.</p>
+      <p>Villages, hiking, food, and beaches.</p>
       <div class="tile-stay">Oniropagida · hill above Kamares</div>
     </div>
     <div class="tile t-mil">
       <div class="tile-k">Milos</div>
       <div class="tile-d">16–19 Sep · 3 nights</div>
-      <p>Boat tour, volcanic beaches, and villages. More adventurous scenery.</p>
+      <p>Boat tour, volcanic beaches, and villages.</p>
       <div class="tile-stay">Plaka Suites · Plaka village</div>
-    </div>
-    <div class="tile t-ret">
-      <div class="tile-k">Return</div>
-      <div class="tile-d">19 Sep · early sailing</div>
-      <p>Early or early-afternoon high-speed Milos → Piraeus, then X96 or Metro Line 3. ATH by 21:30 for 6H570.</p>
-      <div class="tile-stay">Not the last ferry</div>
     </div>
   </div>
 
   <p class="whisper">
     <b>Sifnos</b> is the quiet one: villages, hiking, and food.
     <b>Milos</b> is the adventurous one: beaches, boat tours, volcanic rock.
-    Both skip the crowds and prices of Santorini or Mykonos.
-    The calendar is locked to <b>3 nights Sifnos + 3 Milos</b>, ferry on Wed 16 Sep.
-    Confirm sailings on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a>.
   </p>
 
   <div class="grid">
@@ -987,78 +1100,68 @@
 
     <div class="cell empty"></div>
     <div class="cell empty"></div>
-    <div class="cell off"><div class="num">1</div></div>
-    <div class="cell off"><div class="num">2</div></div>
-    <div class="cell off"><div class="num">3</div></div>
-    <div class="cell off"><div class="num">4</div></div>
-    <div class="cell off"><div class="num">5</div></div>
-
-    <div class="cell off"><div class="num">6</div></div>
-    <div class="cell off"><div class="num">7</div></div>
-    <div class="cell off"><div class="num">8</div></div>
-    <div class="cell off"><div class="num">9</div></div>
-    <div class="cell off"><div class="num">10</div></div>
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
 
     <div class="cell">
       <div class="num"><span class="wd">Fri</span>11</div>
       <div class="chip c-sea"><b>6H567 TLV → ATH</b>11:10 to 13:25</div>
-      <div class="plain">Metro to Emper (Victoria). Walk to Plaka, Anafiotika, sunset, taverna.</div>
+      <div class="plain">Metro to Emper. Plaka at sunset.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Sat</span>12</div>
       <div class="chip c-sand">Rosh Hashanah</div>
-      <div class="plain">08:00 Acropolis, 11:00 museum. Agora or Archaeological Museum nearby.</div>
+      <div class="plain">08:00 Acropolis, 11:00 museum.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Sun</span>13</div>
-      <div class="chip c-sand">Rosh Hashanah</div>
       <div class="chip c-sea"><b>Ferry</b>Piraeus → Sifnos</div>
-      <div class="plain">Kamares port, shuttle to Oniropagida. Pick up ATV at port.</div>
+      <div class="plain">Kamares, shuttle, ATV. Rosh Hashanah.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Mon</span>14</div>
       <div class="chip c-isle"><b>Sifnos</b>Apollonia, Artemonas</div>
-      <div class="plain">Pottery and village walks. Liotrivi lunch, Vathi beach afternoon.</div>
+      <div class="plain">Villages, Liotrivi, Vathi.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Tue</span>15</div>
       <div class="chip c-isle"><b>Sifnos</b>Kastro, beach</div>
-      <div class="plain">Kastro and Chrysopigi. Platis Gialos lunch, sunset at Agios Simeon.</div>
+      <div class="plain">Chrysopigi, Platis Gialos, Agios Simeon.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Wed</span>16</div>
-      <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos, 35 to 60 min</div>
-      <div class="chip c-isle"><b>Milos</b>Sarakiniko, Plaka</div>
-      <div class="plain">Drop ATV at Kamares. Adamas pickup, check in Plaka Suites, Sarakiniko swim.</div>
+      <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos</div>
+      <div class="plain">Adamas pickup. Sarakiniko, Plaka.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Thu</span>17</div>
       <div class="chip c-isle"><b>Milos</b>Boat tour</div>
-      <div class="plain">Full day Kleftiko from Adamas. Evening back in Plaka. Weather backup: Fri.</div>
+      <div class="plain">Full-day Kleftiko from Adamas.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Fri</span>18</div>
       <div class="chip c-isle"><b>Milos</b>Firiplaka, Klima</div>
-      <div class="plain">South-coast beaches, Pollonia lunch, Klima village, last Plaka sunset.</div>
+      <div class="plain">South coast, Pollonia, last sunset.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Sat</span>19</div>
-      <div class="chip c-sea"><b>Ferry</b>Milos → Piraeus, early / early afternoon</div>
-      <div class="plain">Drop ATV at Adamas. Not the last ferry. X96 or Line 3. ATH by 21:30 for 6H570.</div>
+      <div class="chip c-sea"><b>Ferry</b>Milos → Piraeus</div>
+      <div class="plain">Early sailing. At ATH by 21:30.</div>
     </div>
 
     <div class="cell">
       <div class="num"><span class="wd">Sun</span>20</div>
       <div class="chip c-sea"><b>6H570 ATH → TLV</b>00:30 to 02:30</div>
-      <div class="chip c-sand">Yom Kippur starts 18:18</div>
+      <div class="plain">Yom Kippur starts 18:18.</div>
     </div>
 
     <div class="cell">
@@ -1066,16 +1169,8 @@
       <div class="chip c-sand">Yom Kippur</div>
     </div>
 
-    <div class="cell off"><div class="num">22</div></div>
-    <div class="cell off"><div class="num">23</div></div>
-    <div class="cell off"><div class="num">24</div></div>
-    <div class="cell off"><div class="num">25</div></div>
-    <div class="cell off"><div class="num">26</div></div>
-
-    <div class="cell off"><div class="num">27</div></div>
-    <div class="cell off"><div class="num">28</div></div>
-    <div class="cell off"><div class="num">29</div></div>
-    <div class="cell off"><div class="num">30</div></div>
+    <div class="cell empty"></div>
+    <div class="cell empty"></div>
     <div class="cell empty"></div>
     <div class="cell empty"></div>
     <div class="cell empty"></div>
@@ -1097,19 +1192,24 @@
           <div class="day-date"><span class="day-dow">Fri</span><span class="day-num">11</span></div>
           <div class="day-meta">
             <h3>Arrival in Athens</h3>
-            <p>Emper by Zoia Living · Ioulianou 7, Mouseio</p>
+            <p>Mouseio · walk to Plaka</p>
           </div>
           <div class="day-tags"><span class="pill sea">Flight day</span></div>
         </div>
         <ol class="tl">
           <li class="hi"><span class="tl-t">11:10</span><span class="tl-d">Depart Tel Aviv on <b>6H567</b></span></li>
           <li class="hi"><span class="tl-t">13:25</span><span class="tl-d">Land at Athens airport</span></li>
-          <li><span class="tl-t">14:15</span><span class="tl-d">Metro Line 3 to Monastiraki, change to Line 1 for Victoria — or a taxi, about 45 minutes</span></li>
-          <li><span class="tl-t">15:30</span><span class="tl-d">Check in at <b>Emper by Zoia Living</b>, two blocks from the National Archaeological Museum</span></li>
-          <li><span class="tl-t">17:00</span><span class="tl-d">Walk south through Exarchia into <b>Plaka</b> and <b>Anafiotika</b></span></li>
-          <li><span class="tl-t">19:45</span><span class="tl-d">Sunset from <b>Areopagus Hill</b>, under the Acropolis</span></li>
-          <li><span class="tl-t">20:30</span><span class="tl-d">Taverna dinner — Saita, or fried cod at Bakaliarakia tou Damigou</span></li>
+          <li><span class="tl-t">14:15</span><span class="tl-d">Metro Line 3 to Monastiraki, Line 1 to Victoria — or a taxi, ~45 min</span></li>
+          <li><span class="tl-t">15:30</span><span class="tl-d">Check in at <b>Emper</b></span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Walk through Exarchia into <b>Plaka</b> and <b>Anafiotika</b></li>
+            <li>Sunset from <b>Areopagus Hill</b></li>
+            <li>Dinner at Saita, or fried cod at Bakaliarakia tou Damigou</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1117,18 +1217,23 @@
           <div class="day-date"><span class="day-dow">Sat</span><span class="day-num">12</span></div>
           <div class="day-meta">
             <h3>Acropolis day</h3>
-            <p>Athens · classical sites and neighbourhoods</p>
+            <p>Classical sites and neighbourhoods</p>
           </div>
           <div class="day-tags"><span class="pill sand">Rosh Hashanah</span></div>
         </div>
         <ol class="tl">
-          <li class="hi"><span class="tl-t">08:00</span><span class="tl-d">First slot at the <b>Acropolis and Parthenon</b> — cooler, emptier, better light</span></li>
-          <li><span class="tl-t">11:00</span><span class="tl-d"><b>Acropolis Museum</b>, timed ticket</span></li>
+          <li class="hi"><span class="tl-t">08:00</span><span class="tl-d">First slot at the <b>Acropolis and Parthenon</b></span></li>
+          <li class="hi"><span class="tl-t">11:00</span><span class="tl-d"><b>Acropolis Museum</b>, timed ticket</span></li>
           <li><span class="tl-t">13:30</span><span class="tl-d">Lunch in Koukaki</span></li>
-          <li><span class="tl-t">15:30</span><span class="tl-d">Ancient Agora, or wander Psyrri and Thissio</span></li>
-          <li><span class="tl-t">17:30</span><span class="tl-d">Optional: <b>National Archaeological Museum</b>, two minutes from the apartment</span></li>
-          <li><span class="tl-t">20:00</span><span class="tl-d">Dinner at Taverna Saita — call ahead for this one</span></li>
+          <li><span class="tl-t">20:00</span><span class="tl-d">Dinner at Taverna Saita — call ahead</span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Ancient Agora, or wander Psyrri and Thissio</li>
+            <li><b>National Archaeological Museum</b>, two minutes from the apartment</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1136,7 +1241,7 @@
           <div class="day-date"><span class="day-dow">Sun</span><span class="day-num">13</span></div>
           <div class="day-meta">
             <h3>Athens to Sifnos</h3>
-            <p>Oniropagida · the hill above Kamares port</p>
+            <p>Hill above Kamares port</p>
           </div>
           <div class="day-tags">
             <span class="pill sea">Ferry</span>
@@ -1144,14 +1249,19 @@
           </div>
         </div>
         <ol class="tl">
-          <li><span class="tl-t">07:30</span><span class="tl-d">Checkout, Metro Line 1 straight to Piraeus</span></li>
+          <li><span class="tl-t">07:30</span><span class="tl-d">Checkout, Metro Line 1 to Piraeus</span></li>
           <li class="hi"><span class="tl-t">08:30</span><span class="tl-d">Morning ferry <b>Piraeus → Sifnos</b>, 2.5 to 3 hours high-speed</span></li>
-          <li><span class="tl-t">11:30</span><span class="tl-d">Land at Kamares. <b>Oniropagida</b> shuttle up to Choraffes, 1.5 km toward Agios Simeon</span></li>
+          <li><span class="tl-t">11:30</span><span class="tl-d">Land at Kamares. <b>Oniropagida</b> shuttle up the hill</span></li>
           <li><span class="tl-t">12:30</span><span class="tl-d">Collect the <b>ATV or car</b> at the port</span></li>
-          <li><span class="tl-t">17:00</span><span class="tl-d">First look at <b>Apollonia</b> and <b>Artemonas</b></span></li>
-          <li><span class="tl-t">19:30</span><span class="tl-d">Sunset from the terrace, the whole port below you</span></li>
-          <li><span class="tl-t">20:30</span><span class="tl-d">Dinner at Drakakis in Apollonia — old kafeneio, meze, cats</span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>First look at <b>Apollonia</b> and <b>Artemonas</b></li>
+            <li>Sunset from the terrace</li>
+            <li>Dinner at Drakakis in Apollonia</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1159,17 +1269,22 @@
           <div class="day-date"><span class="day-dow">Mon</span><span class="day-num">14</span></div>
           <div class="day-meta">
             <h3>Villages and pottery</h3>
-            <p>Sifnos · Apollonia, Artemonas, Vathi</p>
+            <p>Apollonia, Artemonas, Vathi</p>
           </div>
           <div class="day-tags"><span class="pill isle">Slow day</span></div>
         </div>
         <ol class="tl">
-          <li><span class="tl-t">09:30</span><span class="tl-d">Pottery workshops in Vathi or Exambela — Sifnos has made ceramics for centuries</span></li>
           <li><span class="tl-t">11:30</span><span class="tl-d">Walk <b>Artemonas</b>: mansions, chapels, quiet lanes</span></li>
-          <li><span class="tl-t">13:00</span><span class="tl-d">Lunch at <b>Liotrivi</b> on the square — revithada, mastelo, barrel wine</span></li>
-          <li><span class="tl-t">15:30</span><span class="tl-d">Swim at <b>Vathi</b>, the calm sandy bay</span></li>
-          <li><span class="tl-t">19:00</span><span class="tl-d">Apollonia evening — meze crawl along the main lane</span></li>
+          <li><span class="tl-t">13:00</span><span class="tl-d">Lunch at <b>Liotrivi</b> on the square</span></li>
+          <li><span class="tl-t">15:30</span><span class="tl-d">Swim at <b>Vathi</b></span></li>
+          <li><span class="tl-t">19:00</span><span class="tl-d">Apollonia evening — meze along the main lane</span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Pottery workshops in Vathi or Exambela</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1177,17 +1292,22 @@
           <div class="day-date"><span class="day-dow">Tue</span><span class="day-num">15</span></div>
           <div class="day-meta">
             <h3>Kastro and the coast</h3>
-            <p>Sifnos · medieval village, monastery, beach</p>
+            <p>Medieval village, monastery, beach</p>
           </div>
           <div class="day-tags"><span class="pill isle">Best day here</span></div>
         </div>
         <ol class="tl">
-          <li><span class="tl-t">09:30</span><span class="tl-d"><b>Kastro</b> — medieval walls, marble lanes, sea on three sides</span></li>
-          <li><span class="tl-t">11:00</span><span class="tl-d">Walk down toward <b>Chrysopigi Monastery</b> on its rock</span></li>
-          <li><span class="tl-t">13:00</span><span class="tl-d">Lunch at To Steki, on the sand at Platis Gialos</span></li>
-          <li><span class="tl-t">14:30</span><span class="tl-d">Beach afternoon — Platis Gialos, or back to Vathi</span></li>
-          <li><span class="tl-t">19:30</span><span class="tl-d">Sunset at <b>Agios Simeon</b> chapel, a short walk from the room</span></li>
+          <li><span class="tl-t">09:30</span><span class="tl-d"><b>Kastro</b> — medieval walls, sea on three sides</span></li>
+          <li><span class="tl-t">11:00</span><span class="tl-d">Walk down toward <b>Chrysopigi Monastery</b></span></li>
+          <li><span class="tl-t">13:00</span><span class="tl-d">Lunch at Platis Gialos</span></li>
+          <li><span class="tl-t">19:30</span><span class="tl-d">Sunset at <b>Agios Simeon</b>, a short walk from the room</span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Beach afternoon at Platis Gialos, or back to Vathi</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1195,18 +1315,23 @@
           <div class="day-date"><span class="day-dow">Wed</span><span class="day-num">16</span></div>
           <div class="day-meta">
             <h3>Sifnos to Milos</h3>
-            <p>Plaka Suites · the sunset village</p>
+            <p>The sunset village</p>
           </div>
           <div class="day-tags"><span class="pill sea">Ferry</span></div>
         </div>
         <ol class="tl">
           <li><span class="tl-t">08:00</span><span class="tl-d">Drop the ATV at Kamares</span></li>
           <li class="hi"><span class="tl-t">09:00</span><span class="tl-d">Ferry <b>Sifnos → Milos</b>, 40 to 60 minutes</span></li>
-          <li><span class="tl-t">10:30</span><span class="tl-d">Collect the ATV or car at Adamas, drive up to <b>Plaka Suites</b></span></li>
-          <li><span class="tl-t">16:30</span><span class="tl-d">Swim at <b>Sarakiniko</b> — white volcanic rock, the moon-landscape one</span></li>
-          <li><span class="tl-t">19:30</span><span class="tl-d">Sunset from <b>Plaka Castle</b>, straight up the lane from home</span></li>
-          <li><span class="tl-t">20:30</span><span class="tl-d">Dinner at Barko in Adamas, or Archontoula here in Plaka</span></li>
+          <li><span class="tl-t">10:30</span><span class="tl-d">Collect the ATV at Adamas, drive up to <b>Plaka Suites</b></span></li>
+          <li><span class="tl-t">16:30</span><span class="tl-d">Swim at <b>Sarakiniko</b></span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Sunset from <b>Plaka Castle</b></li>
+            <li>Dinner at Barko in Adamas, or Archontoula in Plaka</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1214,17 +1339,22 @@
           <div class="day-date"><span class="day-dow">Thu</span><span class="day-num">17</span></div>
           <div class="day-meta">
             <h3>Kleftiko by boat</h3>
-            <p>Milos · full day on the water</p>
+            <p>Full day on the water</p>
           </div>
           <div class="day-tags"><span class="pill sea">Boat tour</span></div>
         </div>
         <ol class="tl">
           <li class="hi"><span class="tl-t">08:30</span><span class="tl-d">Full-day <b>Kleftiko</b> tour leaves Adamas — leave the ATV at the port</span></li>
-          <li><span class="tl-t">13:00</span><span class="tl-d">Swimming stops around the sea caves and the south coast</span></li>
           <li><span class="tl-t">17:30</span><span class="tl-d">Back in Adamas, drive up the hill</span></li>
-          <li><span class="tl-t">18:30</span><span class="tl-d">Quiet evening in Plaka — hot tub, balcony, castle stroll</span></li>
         </ol>
-        <p class="day-note"><b>If the wind cancels it:</b> swap Thursday and Friday. Boat tours are the first thing to go in a meltemi.</p>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Swimming stops around the sea caves and the south coast</li>
+            <li>Quiet evening in Plaka — hot tub, balcony, castle stroll</li>
+            <li>If the wind cancels it, swap Thursday and Friday. Boat tours go first in a meltemi.</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1232,17 +1362,22 @@
           <div class="day-date"><span class="day-dow">Fri</span><span class="day-num">18</span></div>
           <div class="day-meta">
             <h3>South coast and fishing villages</h3>
-            <p>Milos · the spread-out land day</p>
+            <p>The spread-out land day</p>
           </div>
           <div class="day-tags"><span class="pill isle">Wheels essential</span></div>
         </div>
         <ol class="tl">
-          <li><span class="tl-t">10:00</span><span class="tl-d"><b>Firiplaka</b> and <b>Tsigrado</b> — the dramatic south-coast beaches</span></li>
-          <li><span class="tl-t">14:00</span><span class="tl-d">Lunch in <b>Pollonia</b>, the fishing village on the northeast tip</span></li>
-          <li><span class="tl-t">17:00</span><span class="tl-d"><b>Klima</b> and its syrmata — painted boat houses at the waterline</span></li>
-          <li><span class="tl-t">19:00</span><span class="tl-d">Early dinner at <b>O! Hamos!</b> in Adamas — no bookings, so arrive early</span></li>
-          <li><span class="tl-t">20:30</span><span class="tl-d">Last sunset from the balcony, or the castle one more time</span></li>
+          <li><span class="tl-t">10:00</span><span class="tl-d"><b>Firiplaka</b> and <b>Tsigrado</b> — south-coast beaches</span></li>
+          <li><span class="tl-t">14:00</span><span class="tl-d">Lunch in <b>Pollonia</b></span></li>
+          <li><span class="tl-t">17:00</span><span class="tl-d"><b>Klima</b> and its painted boat houses</span></li>
+          <li><span class="tl-t">19:00</span><span class="tl-d">Early dinner at <b>O! Hamos!</b> in Adamas</span></li>
         </ol>
+        <details class="more">
+          <summary>Optional</summary>
+          <ul class="more-list">
+            <li>Last sunset from the balcony, or the castle one more time</li>
+          </ul>
+        </details>
       </article>
 
       <article class="day">
@@ -1250,7 +1385,7 @@
           <div class="day-date"><span class="day-dow">Sat</span><span class="day-num">19</span></div>
           <div class="day-meta">
             <h3>Milos to the airport</h3>
-            <p>The one day with no slack — plan it backwards</p>
+            <p>Plan it backwards</p>
           </div>
           <div class="day-tags">
             <span class="pill sea">Ferry</span>
@@ -1258,13 +1393,12 @@
           </div>
         </div>
         <ol class="tl">
-          <li><span class="tl-t">07:30</span><span class="tl-d">Pack, drive down, drop the ATV at Adamas</span></li>
-          <li class="hi"><span class="tl-t">08:30</span><span class="tl-d"><b>Early high-speed Milos → Piraeus</b>, 3 to 4 hours, about €80 each — never the last sailing</span></li>
-          <li><span class="tl-t">13:00</span><span class="tl-d">Fallback sailing: a ~13:00 SeaJet lands ~16:30 and still leaves buffer</span></li>
-          <li><span class="tl-t">17:00</span><span class="tl-d">Piraeus to the airport — <b>X96</b> bus, 60 to 90 minutes, or <b>Metro Line 3</b></span></li>
+          <li><span class="tl-t">07:30</span><span class="tl-d">Pack, drop the ATV at Adamas</span></li>
+          <li class="hi"><span class="tl-t">08:30</span><span class="tl-d"><b>Early high-speed Milos → Piraeus</b>, 3 to 4 hours — never the last sailing</span></li>
+          <li><span class="tl-t">17:00</span><span class="tl-d">Piraeus to the airport — <b>X96</b> or <b>Metro Line 3</b></span></li>
           <li class="hi"><span class="tl-t">21:30</span><span class="tl-d">At the airport, three hours before <b>6H570</b></span></li>
         </ol>
-        <p class="day-note"><b>Do not book</b> a 16:00–17:00 departure: landing 19:30–20:30 is too late. Backup if the sea turns: the 30-minute Milos → Athens flight.</p>
+        <p class="day-note"><b>Do not book</b> a 16:00–17:00 departure. Fallback: a ~13:00 SeaJet, or fly Milos → Athens if the sea turns.</p>
       </article>
 
       <article class="day">
@@ -1272,56 +1406,40 @@
           <div class="day-date"><span class="day-dow">Sun</span><span class="day-num">20</span></div>
           <div class="day-meta">
             <h3>Home</h3>
-            <p>Overnight flight, then Yom Kippur that evening</p>
+            <p>Overnight flight</p>
           </div>
           <div class="day-tags"><span class="pill sea">Flight day</span></div>
         </div>
         <ol class="tl">
           <li class="hi"><span class="tl-t">00:30</span><span class="tl-d"><b>6H570</b> departs Athens</span></li>
           <li class="hi"><span class="tl-t">02:30</span><span class="tl-d">Lands in Tel Aviv</span></li>
-          <li><span class="tl-t">18:18</span><span class="tl-d">Yom Kippur begins — about 16 hours at home first</span></li>
+          <li><span class="tl-t">18:18</span><span class="tl-d">Yom Kippur begins</span></li>
         </ol>
       </article>
 
     </div>
 
-    <h2>Tickets</h2>
-    <div class="rows">
-      <div class="row">
-        <div class="when">Acropolis<span>€30 pp</span></div>
-        <div class="what">Timed entry on the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">official Hellenic Heritage site</a>. Access to the Digital Guide app is included. Book around 9:00. Wtdyt?</div>
-      </div>
-      <div class="row">
-        <div class="when">Acropolis Museum<span>€20 pp</span></div>
-        <div class="what">Timed visit on the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">official museum e-tickets</a> page. Buy before the trip so we skip the queue.</div>
-      </div>
-    </div>
-
     <h2>Getting around</h2>
     <div class="rows">
       <div class="row">
-        <div class="when">Airport<span>Athens</span></div>
-        <div class="what">Metro, bus, or taxi to the city or to Piraeus. Metro to the centre is about an hour.</div>
-      </div>
-      <div class="row">
-        <div class="when">Ferries<span>Between islands</span></div>
-        <div class="what">The best way to move around. Prefer <b>daylight</b> sailings since high speed boats are available. Book early, then check again a few days before: weather can change the timetable. <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a> is the place to compare.</div>
-      </div>
-      <div class="row">
         <div class="when">Piraeus → Sifnos<span>~€70 pp</span></div>
-        <div class="what">2.5 to 5 hours, high-speed often 2.5 to 3. Frequent, with morning (7:00–9:00) and afternoon sailings.</div>
+        <div class="what">2.5 to 3 hours high-speed. Morning sailing after Athens checkout.</div>
       </div>
       <div class="row">
         <div class="when">Sifnos ↔ Milos<span>~€15 pp</span></div>
-        <div class="what">A short hop: 50 minutes high-speed, up to 2 hours conventional. Several a day, easy either way.</div>
+        <div class="what">40 to 60 minutes high-speed. Several a day.</div>
       </div>
       <div class="row">
         <div class="when">Milos → Piraeus<span>~€80 pp</span></div>
-        <div class="what"><b>Early or early-afternoon high-speed</b> on 19 Sep — 3 to 4 hours, not the last sailing. A morning or ~13:00 boat lands mid-afternoon and still leaves time for X96 / Line 3. A 16:00–17:00 SeaJet (land 19:30–20:30) is too tight for ATH by 21:30. Backup: fly Milos → ATH (~30 min, Olympic/Sky Express).</div>
+        <div class="what"><b>Early or early-afternoon high-speed</b> on 19 Sep — 3 to 4 hours, not the last sailing.</div>
       </div>
       <div class="row">
-        <div class="when">Piraeus → ATH<span>X96 / Line 3</span></div>
-        <div class="what">From the port, <b>X96</b> express bus (~60–90 min, runs all night) or <b>Metro Line 3</b> straight to the airport. Be at ATH by <b>21:30</b> — 3 hours before 6H570.</div>
+        <div class="when">Booking<span>Ferries</span></div>
+        <div class="what">Prefer daylight. Recheck on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a> a few days before: wind can cancel. Backup: fly Milos → ATH (~30 min).</div>
+      </div>
+      <div class="row">
+        <div class="when">Piraeus ↔ Airport<span>X96 / Line 3</span></div>
+        <div class="what">Arrival: Line 3 + Line 1 to Victoria. Return: <b>X96</b> (~60–90 min) or <b>Metro Line 3</b>. Be at ATH by <b>21:30</b>.</div>
       </div>
       <div class="row">
         <div class="when">On the islands</div>
@@ -1343,7 +1461,7 @@
           <span class="box"></span>
           <span class="check-title">Flights booked</span>
         </label>
-        <p class="check-note">Kiwi - Israir, both nonstop, 1 free carry-on. Outbound <b>6H567</b> Fri 11 Sep TLV → ATH 11:10–13:25. Return <b>6H570</b> Sun 20 Sep ATH → TLV 00:30–02:30. Be at ATH by <b>21:30</b> (3 hours before). Screenshot the confirmation and check in with Israir.</p>
+        <p class="check-note">Kiwi · Israir, both nonstop, 1 free carry-on. Screenshot the confirmation and check in with Israir.</p>
       </div>
 
       <div class="task" data-task="ferries">
@@ -1352,7 +1470,7 @@
           <span class="box"></span>
           <span class="check-title">Book ferries</span>
         </label>
-        <p class="check-note">Three legs, all on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a>. Prefer daylight sailings. The return should be an <b>early or early-afternoon</b> Milos → Piraeus boat, not the last one. Recheck a few days before — wind can shift the timetable.</p>
+        <p class="check-note">Three legs on <a href="https://www.ferryhopper.com" target="_blank" rel="noopener">Ferryhopper</a>. Prefer daylight. Recheck a few days before.</p>
         <div class="todo-subs">
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1360,10 +1478,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sun 13 Sep · Piraeus → Sifnos</span>
             </label>
-            <p class="todo-sub-note">Morning sailing after Athens checkout. High-speed often 2.5 to 3 hours, ~€70 pp. Land at Kamares, Oniropagida shuttle up the hill, pick up ATV at port.</p>
-            <div class="pills">
-              <span class="pill sea">Sun 13 · after Athens checkout</span>
-            </div>
+            <p class="todo-sub-note">Morning high-speed after checkout, ~€70 pp, 2.5 to 3 hours. Land at Kamares.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1371,10 +1486,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Wed 16 Sep · Sifnos → Milos</span>
             </label>
-            <p class="todo-sub-note">Morning or midday high-speed, ~40 to 45 min, ~€15 pp. Drop Sifnos ATV at Kamares, pick up at Adamas. Check in Plaka Suites, still time for Sarakiniko that afternoon.</p>
-            <div class="pills">
-              <span class="pill sea">Wed 16 · island hop</span>
-            </div>
+            <p class="todo-sub-note">Morning or midday high-speed, ~40 to 60 min, ~€15 pp.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1382,11 +1494,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sat 19 Sep · Milos → Piraeus</span>
             </label>
-            <p class="todo-sub-note">The critical leg. Book an <b>early or early-afternoon</b> high-speed, not the last sailing — 3 to 4 hours, ~€80 pp. Drop ATV at Adamas first. From Piraeus take X96 (~60–90 min) or Metro Line 3 to ATH — be there by <b>21:30</b> (3 hours before 6H570). Skip 16:00–17:00 boats. If no early sailing, fly Milos → ATH (~30 min).</p>
-            <div class="pills">
-              <span class="pill sea">Sat 19 · early / early afternoon</span>
-              <span class="pill sand">ATH by 21:30 · 6H570</span>
-            </div>
+            <p class="todo-sub-note">Early or early-afternoon high-speed, ~€80 pp. Not the last sailing. ATH by <b>21:30</b>.</p>
           </div>
         </div>
       </div>
@@ -1397,7 +1505,7 @@
           <span class="box"></span>
           <span class="check-title">Hotels booked</span>
         </label>
-        <p class="check-note">All three stays confirmed. Emper is in Mouseio (not Plaka — metro or walk to sites). Oniropagida is above Kamares port, not in Apollonia village. Plaka Suites is in the heart of Plaka — vehicle pickup stays at Adamas.</p>
+        <p class="check-note">All three confirmed. Emper is Mouseio, not Plaka. Oniropagida is above Kamares. Plaka Suites is in Plaka village.</p>
         <div class="todo-subs">
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1405,11 +1513,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Athens · Emper by Zoia Living, Ioulianou 7</span>
             </label>
-            <p class="todo-sub-note">2 nights, check in Fri 11 (6H567 lands 13:25), check out Sun 13. Mouseio / Victoria area — 5 min walk to Victoria metro (Line 1), 2 min to National Archaeological Museum, ~25 min walk to Plaka.</p>
-            <div class="pills">
-              <span class="pill sand">Fri 11 · arrival</span>
-              <span class="pill sand">Sat 12 · Acropolis</span>
-            </div>
+            <p class="todo-sub-note">2 nights, Fri 11 – Sun 13. Mouseio — 5 min to Victoria metro (Line 1).</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1417,12 +1521,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sifnos · Oniropagida, Kamares Limani</span>
             </label>
-            <p class="todo-sub-note">3 nights, Sun 13 – Wed 16. Hill above Kamares port (Choraffes), panoramic sunset over the port. Free parking, free port shuttle. Apollonia and beaches are day trips by ATV or car.</p>
-            <div class="pills">
-              <span class="pill isle">Sun 13 · Kamares arrival</span>
-              <span class="pill isle">Mon 14 · villages</span>
-              <span class="pill isle">Tue 15 · Kastro &amp; beach</span>
-            </div>
+            <p class="todo-sub-note">3 nights, Sun 13 – Wed 16. Hill above Kamares. Free parking and port shuttle.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1430,14 +1529,18 @@
               <span class="box"></span>
               <span class="todo-sub-title">Milos · Plaka Suites, Plaka</span>
             </label>
-            <p class="todo-sub-note">3 nights Wed 16 – Sat 19. Heart of Plaka village — sunset from the balcony or Plaka Castle. Pick up and drop ATV at Adamas port (~10 min drive). Boat tours also leave from Adamas.</p>
-            <div class="pills">
-              <span class="pill sea">Wed 16 · Sarakiniko arrival</span>
-              <span class="pill sea">Thu 17 · boat tour</span>
-              <span class="pill sea">Fri 18 · Firiplaka &amp; Klima</span>
-            </div>
+            <p class="todo-sub-note">3 nights, Wed 16 – Sat 19. Heart of Plaka. ATV pickup at Adamas (~10 min).</p>
           </div>
         </div>
+      </div>
+
+      <div class="task" data-task="tickets">
+        <label class="check">
+          <input type="checkbox" data-id="tickets">
+          <span class="box"></span>
+          <span class="check-title">Book Acropolis tickets</span>
+        </label>
+        <p class="check-note">Site <b>€30</b> on the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">official Hellenic Heritage</a> page — first slot, Digital Guide included. Museum <b>€20</b> on the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">official e-tickets</a> page. Buy before the trip.</p>
       </div>
 
       <div class="task" data-task="scooters">
@@ -1446,7 +1549,7 @@
           <span class="box"></span>
           <span class="check-title">Book wheels (ATV or small car)</span>
         </label>
-        <p class="check-note">Skip Athens. Chilean car (B) license is valid in Greece <b>without an IDP</b>, but <b>not for 125cc scooters</b> — you need motorcycle A/A1/A2 for those. A category B license covers 150–350cc ATVs and rental cars (license held 1+ year, age 21+). Helmets mandatory. Confirm the agency accepts your license when booking — ATV rules are tightening in 2026.</p>
+        <p class="check-note">Skip Athens. ATV or small car on both islands. Confirm the agency accepts a Chilean B license.</p>
         <div class="todo-subs">
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1454,12 +1557,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sifnos · ATV or car, Kamares port pickup</span>
             </label>
-            <p class="todo-sub-note">Collect Sun 13 when the ferry lands, drop at Kamares Wed 16. Needed for Apollonia, Platis Gialos, Vathi, and Kastro. Try <a href="https://sifnosrentals.gr/en/" target="_blank" rel="noopener">Loukataris / sifnosrentals.gr</a> for port delivery. E-bike alternative: <a href="https://sifnosbikexperience.com/" target="_blank" rel="noopener">Sifnos Bike Experience</a> in Exambela (no license, Bosch motor, handles the hills).</p>
-            <div class="pills">
-              <span class="pill isle">Sun 13 · pick up</span>
-              <span class="pill isle">Beaches &amp; villages</span>
-              <span class="pill isle">Wed 16 · drop at Kamares</span>
-            </div>
+            <p class="todo-sub-note">Collect Sun 13 at Kamares, drop Wed 16. Try <a href="https://sifnosrentals.gr/en/" target="_blank" rel="noopener">Loukataris / sifnosrentals.gr</a>. E-bike: <a href="https://sifnosbikexperience.com/" target="_blank" rel="noopener">Sifnos Bike Experience</a> in Exambela.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1467,13 +1565,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Milos · ATV or car, Adamas port pickup</span>
             </label>
-            <p class="todo-sub-note">Collect Wed 16 at Adamas, drop Sat 19 before the <b>early or early-afternoon</b> Piraeus ferry. Essential for Sarakiniko, Firiplaka, Klima, and Pollonia — beaches are spread out and Plaka Suites is up the hill from the port. Leave it in Adamas on the boat-tour day. Several desks at the port; license held 1+ year, age 21+.</p>
-            <div class="pills">
-              <span class="pill sea">Wed 16 · Adamas pickup</span>
-              <span class="pill sea">Thu 17 · leave in port (boat day)</span>
-              <span class="pill sea">Fri 18 · Firiplaka · Klima · Pollonia</span>
-              <span class="pill sea">Sat 19 · drop before ferry</span>
-            </div>
+            <p class="todo-sub-note">Collect Wed 16 at Adamas, drop Sat 19 before the ferry. Leave it in Adamas on the boat-tour day.</p>
           </div>
         </div>
       </div>
@@ -1484,7 +1576,7 @@
           <span class="box"></span>
           <span class="check-title">Must-try restaurants</span>
         </label>
-        <p class="check-note">Village tavernas, not the fancy rooms. Think <b>€15–25 a head</b> with wine, homemade pots, and fried fish. A couple are worth a phone call; the rest are walk-in. Skip the main Plaka tourist strip and anyone waving a menu at you.</p>
+        <p class="check-note">Village tavernas, about <b>€15–25 a head</b> with wine. Skip the Plaka tourist strip.</p>
         <div class="todo-subs">
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1492,11 +1584,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Athens · Taverna Saita, Plaka <span class="tag tag-book">Book</span></span>
             </label>
-            <p class="todo-sub-note">Hole-in-the-wall on the quiet end of Kydathineon, about <b>€15–20</b>. Bakaliaros with skordalia, lamb, ekmek. Call <a href="tel:+302103226671">+30 210 322 6671</a> for Saturday after the Acropolis. Friday can be walk-in, or the basement next door: <b>Bakaliarakia tou Damigou</b> (fried cod, since 1865, no fuss).</p>
-            <div class="pills">
-              <span class="pill sand">Fri 11 · Damigos or Saita</span>
-              <span class="pill sand">Sat 12 · book Saita</span>
-            </div>
+            <p class="todo-sub-note">€15–20. Call <a href="tel:+302103226671">+30 210 322 6671</a> for Saturday. Friday walk-in, or <b>Bakaliarakia tou Damigou</b> next door.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1504,10 +1592,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sifnos · Liotrivi, Artemonas square <span class="tag tag-book">Book</span></span>
             </label>
-            <p class="todo-sub-note">Old family taverna on the square, about <b>€15–20</b>. This is the Sifnos food: <b>revithada</b> (Sunday chickpea stew), mastelo, caper salad, barrel wine. Pair it with a village evening. Ask for a table when you arrive, or call <a href="tel:+302284031921">+30 22840 31921</a>.</p>
-            <div class="pills">
-              <span class="pill isle">Mon 14 or Tue 15 · villages</span>
-            </div>
+            <p class="todo-sub-note">€15–20. Revithada, mastelo, barrel wine. Call <a href="tel:+302284031921">+30 22840 31921</a>.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1515,11 +1600,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Sifnos · Drakakis, Apollonia <span class="tag tag-walk">No booking</span></span>
             </label>
-            <p class="todo-sub-note">Old kafeneio on the main lane. Meze, beer, house wine, cats. Go around 19:00. Beach day alternative: <b>To Steki</b> on the sand at Platis Gialos, traditional pots and fish, same price band, skip the tiny fish-bar next door.</p>
-            <div class="pills">
-              <span class="pill isle">Sun 13 · arrival night</span>
-              <span class="pill isle">Tue 15 · beach day</span>
-            </div>
+            <p class="todo-sub-note">Old kafeneio, walk-in around 19:00. Beach alternative: <b>To Steki</b> at Platis Gialos.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1527,10 +1608,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Milos · O! Hamos!, Adamas <span class="tag tag-walk">No booking</span></span>
             </label>
-            <p class="todo-sub-note">Farm taverna by Papikinou, not a white-tablecloth place. Slow-cooked goat, chickpeas, garden food. They do not take reservations. Arrive around 19:00; drink across the road if there is a wait.</p>
-            <div class="pills">
-              <span class="pill sea">Fri 18 · go early</span>
-            </div>
+            <p class="todo-sub-note">Farm taverna. No reservations — arrive around 19:00.</p>
           </div>
           <div class="todo-sub">
             <label class="todo-sub-head">
@@ -1538,10 +1616,7 @@
               <span class="box"></span>
               <span class="todo-sub-title">Milos · Barko, Adamas <span class="tag tag-book">Book</span></span>
             </label>
-            <p class="todo-sub-note">Family courtyard under the vines since 1993, the easy-value table in town: fava, lamb chops, zucchini fritters. Call <a href="tel:+302287022660">+30 22870 22660</a> or see <a href="https://barkotavernmilos.com/en/" target="_blank" rel="noopener">barkotavernmilos.com</a>. Cheap lunch: gyros in Adamas and keep moving.</p>
-            <div class="pills">
-              <span class="pill sea">Wed 16 · arrival night</span>
-            </div>
+            <p class="todo-sub-note">Call <a href="tel:+302287022660">+30 22870 22660</a> or see <a href="https://barkotavernmilos.com/en/" target="_blank" rel="noopener">barkotavernmilos.com</a>.</p>
           </div>
         </div>
       </div>
@@ -1549,20 +1624,9 @@
     </div>
 
     <div class="tips">
-      <b>Worth planning ahead</b>
-      <ul>
-        <li>Flights are booked: Kiwi, Israir <b>6H567</b> out and <b>6H570</b> back. On 19 Sep take an <b>early or early-afternoon</b> Milos → Piraeus high-speed — not the last ferry — then X96 or Metro Line 3. Be at ATH by <b>21:30</b> (3 hours before 00:30).</li>
-        <li>Sifnos and Milos ferries can be cancelled in strong wind. Keep a Milos → ATH flight (~30 min) as backup, and recheck times a few days before you travel.</li>
-        <li>Acropolis tickets are timed. Buy them before the trip and go for the first slot: the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">site is €30</a> (Digital Guide app included) and the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">museum is €20</a>.</li>
-        <li>Book ATVs or a small car in advance for both islands — Chilean car license works without an IDP, but not for 125cc scooters. Confirm with the rental agency.</li>
-        <li>Cards work almost everywhere. Carry a little cash for small shops and taxis.</li>
-      </ul>
-    </div>
-
-    <div class="tips">
       <b>Packing</b>
       <div class="pack">
-        <span>Passport and a copy, cards, some cash</span>
+        <span>Passport, cards, a little cash — cards work almost everywhere</span>
         <span>Comfortable walking shoes and sandals</span>
         <span>Swimwear, sunscreen, hat, sunglasses</span>
         <span>Light jacket for evenings and the ferry</span>
@@ -1919,6 +1983,24 @@
 
   syncParents();
   paint();
+})();
+</script>
+<script>
+(function(){
+  var opened = [];
+  window.addEventListener("beforeprint", function(){
+    opened = [];
+    document.querySelectorAll("details.more").forEach(function(el){
+      if (!el.open){
+        el.open = true;
+        opened.push(el);
+      }
+    });
+  });
+  window.addEventListener("afterprint", function(){
+    opened.forEach(function(el){ el.open = false; });
+    opened = [];
+  });
 })();
 </script>
 </body>
