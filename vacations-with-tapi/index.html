@@ -14,7 +14,7 @@
   :root{
     --ink:#1f1e1c;
     --ink-2:#5c5a54;
-    --ink-3:#8f8d85;
+    --ink-3:#77756e;
     --line:#e6e4dd;
     --line-2:#d4d1c8;
     --paper:#ffffff;
@@ -39,7 +39,9 @@
     -webkit-text-size-adjust:100%;
     text-size-adjust:100%;
     background:var(--shell);
+    scroll-behavior:smooth;
   }
+  [id]{scroll-margin-top:76px}
   body{
     background:var(--shell);
     color:var(--ink);
@@ -59,6 +61,40 @@
     border-radius:14px;
     padding:40px 40px 44px;
     box-shadow:var(--shadow-2);
+  }
+  .site-nav{
+    position:sticky;
+    top:10px;
+    z-index:20;
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    margin:0 0 24px;
+    padding:5px;
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--line);
+    border-radius:12px;
+    box-shadow:0 5px 18px -14px rgba(31,30,28,.35);
+    scrollbar-width:none;
+  }
+  .site-nav::-webkit-scrollbar{display:none}
+  .site-nav a{
+    flex:0 0 auto;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    padding:8px 13px;
+    border-radius:8px;
+    color:var(--ink-2);
+    font-size:12px;
+    font-weight:600;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .site-nav a:hover,.site-nav a:focus-visible{background:var(--sea);color:var(--sea-ink)}
+  .site-nav a:focus-visible,a:focus-visible,.route-view:focus-visible,.map-place:focus-visible{
+    outline:2px solid var(--sea-ink);
+    outline-offset:2px;
   }
   header{
     position:relative;
@@ -384,6 +420,15 @@
     background:var(--sea-ink);
     border-color:var(--sea-ink);
   }
+  .tl li.booked{
+    margin:3px 0;
+    padding:9px 10px 9px 0;
+    border:1px solid var(--sea-line);
+    border-radius:9px;
+    background:var(--sea);
+  }
+  .tl li.booked::before{left:57px}
+  .tl li.booked .tl-t{color:var(--sea-ink);font-size:13px}
   .tl-t{
     font-size:12px;
     font-weight:600;
@@ -393,6 +438,43 @@
   }
   .tl li.hi .tl-t{color:var(--sea-ink)}
   .tl-d{font-size:13.5px;color:var(--ink-2);overflow-wrap:break-word}
+  .booked-label{
+    display:inline-block;
+    margin-left:6px;
+    padding:2px 6px;
+    border:1px solid var(--sea-line);
+    border-radius:99px;
+    color:var(--sea-ink);
+    background:rgba(255,255,255,.58);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    vertical-align:2px;
+  }
+  .booking-summary{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin:0 0 12px 78px;
+  }
+  .booking-card{
+    padding:10px 12px;
+    border:1px solid var(--sea-line);
+    border-radius:9px;
+    background:var(--sea);
+  }
+  .booking-card strong{display:block;color:var(--sea-ink);font-size:17px;font-variant-numeric:tabular-nums}
+  .booking-card span{display:block;margin-top:2px;color:var(--ink-2);font-size:12px}
+  .day-alert{
+    margin:12px 0 0 78px;
+    padding:10px 12px;
+    border-left:3px solid var(--sea-ink);
+    border-radius:0 8px 8px 0;
+    background:var(--sea);
+    color:var(--ink-2);
+    font-size:13px;
+  }
   .tl-d b{color:var(--ink);font-weight:600}
   .day-note{
     margin:10px 0 0 78px;
@@ -439,6 +521,16 @@
     outline:2px solid var(--sea-ink);
     outline-offset:2px;
     border-radius:8px;
+  }
+  .calendar-link{
+    display:inline-flex;
+    min-height:36px;
+    align-items:center;
+    margin-top:5px;
+    font-size:11px;
+    font-weight:600;
+    color:var(--sea-ink);
+    text-decoration:none;
   }
   .more-list{
     margin:0;
@@ -735,6 +827,12 @@
     padding:7px 0;
     border-bottom:1px solid var(--line);
   }
+  .muted-strong{color:var(--ink-2)}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
 
   @media (max-width:820px){
     html,body{background:var(--paper)}
@@ -745,6 +843,7 @@
       padding:max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
     }
     header{flex-direction:column;align-items:stretch;gap:18px;padding:24px 18px 20px;border-radius:14px}
+    .site-nav{top:0;margin-left:-2px;margin-right:-2px}
     h1{font-size:clamp(34px, 11vw, 46px);line-height:1.02}
     .kicker{margin-bottom:10px}
     .sub{margin-top:14px}
@@ -803,13 +902,18 @@
     .tl li{grid-template-columns:42px 1fr;column-gap:22px}
     .tl li::before{left:45px}
     .tl-d{font-size:14px}
-    .day-note,.more{margin-left:64px}
+    .tl li.booked{padding-right:8px}
+    .tl li.booked::before{left:45px}
+    .booking-summary{grid-template-columns:1fr;margin-left:64px}
+    .day-alert,.day-note,.more{margin-left:64px}
     .pack{grid-template-columns:1fr;gap:0}
     .tips{padding:16px}
     .whisper{font-size:14px}
   }
   @media (max-width:480px){
     .overview{grid-template-columns:1fr}
+    .booking-summary{margin-left:0}
+    .day-alert,.day-note,.more{margin-left:0}
   }
 
   .route{
@@ -992,12 +1096,12 @@
   @media print{
     body{background:#fff}
     .sheet{margin:0;border:none;border-radius:0;padding:0;max-width:none;box-shadow:none}
-    .route{display:none}
+    .route,.site-nav,.calendar-link{display:none}
     .cell{min-height:120px}
     header{border-radius:0;background:none;border:none;border-bottom:1px solid var(--line);box-shadow:none;padding:0 0 18px}
     header::before{display:none}
     .hero-stats{box-shadow:none}
-    .day,.tile,.more{box-shadow:none;break-inside:avoid}
+    .day,.tile,.more,.booking-summary,.day-alert{box-shadow:none;break-inside:avoid}
     .check input:checked + .box,
     .todo-sub-head input:checked + .box,
     .hop::before,
@@ -1029,20 +1133,15 @@
     </div>
   </header>
 
-  <section class="route" aria-label="Trip route map">
-    <div class="route-head">
-      <h2>Route</h2>
-      <div class="route-views" role="tablist" aria-label="Map views">
-        <button type="button" class="route-view on" data-view="trip" role="tab" aria-selected="true">Trip</button>
-        <button type="button" class="route-view" data-view="sifnos" role="tab" aria-selected="false">Sifnos</button>
-        <button type="button" class="route-view" data-view="milos" role="tab" aria-selected="false">Milos</button>
-      </div>
-    </div>
-    <div id="trip-map" role="tabpanel" aria-label="Interactive map"></div>
-    <div class="map-places" id="map-places" aria-label="Places on this view"></div>
-  </section>
+  <nav class="site-nav" aria-label="Trip sections">
+    <a href="#calendar">Calendar</a>
+    <a href="#itinerary">Day by day</a>
+    <a href="#route">Route</a>
+    <a href="#flights">Flights</a>
+    <a href="#checklist">Checklist</a>
+  </nav>
 
-  <div class="flights">
+  <div class="flights" id="flights">
     <div class="flights-head">
       <h2>Flights</h2>
       <p>Kiwi · Israir · 1 free carry-on · both nonstop</p>
@@ -1089,7 +1188,7 @@
     <b>Milos</b> is the adventurous one: beaches, boat tours, volcanic rock.
   </p>
 
-  <div class="grid">
+  <div class="grid" id="calendar" aria-label="Trip calendar">
     <div class="dow">Sun</div>
     <div class="dow">Mon</div>
     <div class="dow">Tue</div>
@@ -1104,61 +1203,61 @@
     <div class="cell empty"></div>
     <div class="cell empty"></div>
 
-    <div class="cell">
+    <div class="cell" data-day="11">
       <div class="num"><span class="wd">Fri</span>11</div>
       <div class="chip c-sea"><b>6H567 TLV → ATH</b>11:10 to 13:25</div>
       <div class="plain">Metro to Emper. Plaka at sunset.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="12">
       <div class="num"><span class="wd">Sat</span>12</div>
       <div class="chip c-sand">Rosh Hashanah</div>
-      <div class="plain">08:00 Acropolis, 11:00 museum.</div>
+      <div class="plain"><b>09:00 Museum</b><br><b>12:00 Acropolis</b></div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="13">
       <div class="num"><span class="wd">Sun</span>13</div>
       <div class="chip c-sea"><b>Ferry</b>Piraeus → Sifnos</div>
       <div class="plain">Kamares, shuttle, ATV. Rosh Hashanah.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="14">
       <div class="num"><span class="wd">Mon</span>14</div>
       <div class="chip c-isle"><b>Sifnos</b>Apollonia, Artemonas</div>
       <div class="plain">Villages, Liotrivi, Vathi.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="15">
       <div class="num"><span class="wd">Tue</span>15</div>
       <div class="chip c-isle"><b>Sifnos</b>Kastro, beach</div>
       <div class="plain">Chrysopigi, Platis Gialos, Agios Simeon.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="16">
       <div class="num"><span class="wd">Wed</span>16</div>
       <div class="chip c-sea"><b>Ferry</b>Sifnos → Milos</div>
       <div class="plain">Adamas pickup. Sarakiniko, Plaka.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="17">
       <div class="num"><span class="wd">Thu</span>17</div>
       <div class="chip c-isle"><b>Milos</b>Boat tour</div>
       <div class="plain">Full-day Kleftiko from Adamas.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="18">
       <div class="num"><span class="wd">Fri</span>18</div>
       <div class="chip c-isle"><b>Milos</b>Firiplaka, Klima</div>
       <div class="plain">South coast, Pollonia, last sunset.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="19">
       <div class="num"><span class="wd">Sat</span>19</div>
       <div class="chip c-sea"><b>Ferry</b>Milos → Piraeus</div>
       <div class="plain">Early sailing. At ATH by 21:30.</div>
     </div>
 
-    <div class="cell">
+    <div class="cell" data-day="20">
       <div class="num"><span class="wd">Sun</span>20</div>
       <div class="chip c-sea"><b>6H570 ATH → TLV</b>00:30 to 02:30</div>
       <div class="plain">Yom Kippur starts 18:18.</div>
@@ -1183,11 +1282,11 @@
     <span class="spacer">2 nights Athens · 3 nights Sifnos · 3 nights Milos</span>
   </div>
 
-  <div class="notes">
+  <div class="notes" id="itinerary">
     <h2>Day by day</h2>
     <div class="days">
 
-      <article class="day">
+      <article class="day" id="day-11" data-day="11">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Fri</span><span class="day-num">11</span></div>
           <div class="day-meta">
@@ -1212,31 +1311,43 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-12" data-day="12">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Sat</span><span class="day-num">12</span></div>
           <div class="day-meta">
             <h3>Acropolis day</h3>
-            <p>Classical sites and neighbourhoods</p>
+            <p>Museum morning · Acropolis at noon · relaxed afternoon</p>
           </div>
-          <div class="day-tags"><span class="pill sand">Rosh Hashanah</span></div>
+          <div class="day-tags"><span class="pill sea">2 booked visits</span><span class="pill sand">Rosh Hashanah</span></div>
+        </div>
+        <div class="booking-summary" aria-label="Confirmed Saturday bookings">
+          <div class="booking-card"><strong>09:00</strong><span>Acropolis Museum · booked</span></div>
+          <div class="booking-card"><strong>12:00</strong><span>Acropolis and Parthenon · booked</span></div>
         </div>
         <ol class="tl">
-          <li class="hi"><span class="tl-t">08:00</span><span class="tl-d">First slot at the <b>Acropolis and Parthenon</b></span></li>
-          <li class="hi"><span class="tl-t">11:00</span><span class="tl-d"><b>Acropolis Museum</b>, timed ticket</span></li>
-          <li><span class="tl-t">13:30</span><span class="tl-d">Lunch in Koukaki</span></li>
-          <li><span class="tl-t">20:00</span><span class="tl-d">Dinner at Taverna Saita — call ahead</span></li>
+          <li><span class="tl-t">07:45</span><span class="tl-d">Breakfast at <b>Emper</b></span></li>
+          <li><span class="tl-t">08:15</span><span class="tl-d">Leave Emper and walk or take the metro toward the museum</span></li>
+          <li><span class="tl-t">08:45</span><span class="tl-d">Arrive at the museum, with tickets ready for entry</span></li>
+          <li class="hi booked"><span class="tl-t">09:00</span><span class="tl-d"><b>Acropolis Museum</b><span class="booked-label">Booked</span><br>Plan approximately two hours inside</span></li>
+          <li><span class="tl-t">11:00</span><span class="tl-d">Snack and water break before the climb</span></li>
+          <li><span class="tl-t">11:20</span><span class="tl-d">Walk toward the Acropolis entrance</span></li>
+          <li><span class="tl-t">11:40</span><span class="tl-d">Arrival buffer, with tickets ready for the queue</span></li>
+          <li class="hi booked"><span class="tl-t">12:00</span><span class="tl-d"><b>Acropolis and Parthenon</b><span class="booked-label">Booked</span><br>Allow approximately two hours</span></li>
+          <li><span class="tl-t">14:15</span><span class="tl-d">Lunch in Koukaki</span></li>
+          <li><span class="tl-t">15:30</span><span class="tl-d">Rest at <b>Emper</b> and keep the afternoon flexible</span></li>
+          <li><span class="tl-t">18:00</span><span class="tl-d">Optional neighbourhood walk in Psyrri or Thissio</span></li>
+          <li><span class="tl-t">20:00</span><span class="tl-d">Dinner at Taverna Saita, call ahead</span></li>
         </ol>
+        <p class="day-alert"><b>Day note:</b> Bring water, sunscreen, a hat, and comfortable walking shoes.</p>
         <details class="more">
           <summary>Optional</summary>
           <ul class="more-list">
-            <li>Ancient Agora, or wander Psyrri and Thissio</li>
-            <li><b>National Archaeological Museum</b>, two minutes from the apartment</li>
+            <li><b>Ancient Agora</b> or the <b>National Archaeological Museum</b> can replace the evening walk if you still have energy.</li>
           </ul>
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-13" data-day="13">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Sun</span><span class="day-num">13</span></div>
           <div class="day-meta">
@@ -1264,7 +1375,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-14" data-day="14">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Mon</span><span class="day-num">14</span></div>
           <div class="day-meta">
@@ -1287,7 +1398,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-15" data-day="15">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Tue</span><span class="day-num">15</span></div>
           <div class="day-meta">
@@ -1310,7 +1421,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-16" data-day="16">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Wed</span><span class="day-num">16</span></div>
           <div class="day-meta">
@@ -1334,7 +1445,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-17" data-day="17">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Thu</span><span class="day-num">17</span></div>
           <div class="day-meta">
@@ -1357,7 +1468,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-18" data-day="18">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Fri</span><span class="day-num">18</span></div>
           <div class="day-meta">
@@ -1380,7 +1491,7 @@
         </details>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-19" data-day="19">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Sat</span><span class="day-num">19</span></div>
           <div class="day-meta">
@@ -1401,7 +1512,7 @@
         <p class="day-note"><b>Do not book</b> a 16:00–17:00 departure. Fallback: a ~13:00 SeaJet, or fly Milos → Athens if the sea turns.</p>
       </article>
 
-      <article class="day">
+      <article class="day" id="day-20" data-day="20">
         <div class="day-head">
           <div class="day-date"><span class="day-dow">Sun</span><span class="day-num">20</span></div>
           <div class="day-meta">
@@ -1447,7 +1558,7 @@
       </div>
     </div>
 
-    <div class="todo-head">
+    <div class="todo-head" id="checklist">
       <h2>Still to do</h2>
       <p><b id="todo-done">0</b> of <span id="todo-total">0</span> done · ticks stay on this device</p>
     </div>
@@ -1538,9 +1649,9 @@
         <label class="check">
           <input type="checkbox" data-id="tickets">
           <span class="box"></span>
-          <span class="check-title">Book Acropolis tickets</span>
+          <span class="check-title">Acropolis and Museum tickets booked</span>
         </label>
-        <p class="check-note">Site <b>€30</b> on the <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">official Hellenic Heritage</a> page — first slot, Digital Guide included. Museum <b>€20</b> on the <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">official e-tickets</a> page. Buy before the trip.</p>
+        <p class="check-note">Confirmed entry times: <b>Acropolis Museum at 09:00</b> and <b>Acropolis and Parthenon at 12:00</b>. Keep the tickets ready on the day. Visitor information: <a href="https://tickets.hh.gr/en/venues/acropolis-of-athens-tickets" target="_blank" rel="noopener">Acropolis site</a> and <a href="https://etickets.theacropolismuseum.gr/?culture=en" target="_blank" rel="noopener">Acropolis Museum</a>.</p>
       </div>
 
       <div class="task" data-task="scooters">
@@ -1634,6 +1745,19 @@
       </div>
     </div>
   </div>
+
+  <section class="route" id="route" aria-label="Trip route map">
+    <div class="route-head">
+      <h2>Route</h2>
+      <div class="route-views" role="tablist" aria-label="Map views">
+        <button type="button" class="route-view on" data-view="trip" role="tab" aria-selected="true">Trip</button>
+        <button type="button" class="route-view" data-view="sifnos" role="tab" aria-selected="false">Sifnos</button>
+        <button type="button" class="route-view" data-view="milos" role="tab" aria-selected="false">Milos</button>
+      </div>
+    </div>
+    <div id="trip-map" role="tabpanel" aria-label="Interactive map"></div>
+    <div class="map-places" id="map-places" aria-label="Places on this view"></div>
+  </section>
 
 </div>
 <script src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js" crossorigin=""></script>
@@ -1904,6 +2028,7 @@
 <script>
 (function(){
   var KEY = "vwt-todo-2026";
+  var MIGRATION_KEY = "vwt-tickets-booked-2026";
   var root = document.getElementById("todo");
   if (!root) return;
 
@@ -1912,7 +2037,8 @@
     catch (e) { return {}; }
   }
   function save(state){
-    localStorage.setItem(KEY, JSON.stringify(state));
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { /* Keep the current session usable when storage is unavailable. */ }
   }
 
   var DEFAULTS = {
@@ -1920,9 +2046,19 @@
     hotels: true,
     "hotels-athens": true,
     "hotels-sifnos": true,
-    "hotels-milos": true
+    "hotels-milos": true,
+    tickets: true
   };
   var state = load();
+  var migrated = false;
+  try { migrated = localStorage.getItem(MIGRATION_KEY) === "1"; }
+  catch (e) { migrated = false; }
+  if (!migrated){
+    state.tickets = true;
+    try { localStorage.setItem(MIGRATION_KEY, "1"); }
+    catch (e) { /* The checkbox remains complete for this session. */ }
+    save(state);
+  }
   var boxes = [].slice.call(root.querySelectorAll("input[type=checkbox][data-id]"));
 
   boxes.forEach(function(box){
@@ -1983,6 +2119,20 @@
 
   syncParents();
   paint();
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll(".cell[data-day]").forEach(function(cell){
+    var day = cell.getAttribute("data-day");
+    var target = document.getElementById("day-" + day);
+    if (!target) return;
+    var link = document.createElement("a");
+    link.className = "calendar-link";
+    link.href = "#day-" + day;
+    link.textContent = "View day";
+    cell.appendChild(link);
+  });
 })();
 </script>
 <script>
